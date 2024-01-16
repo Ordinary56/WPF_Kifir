@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +18,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using WPF_Kifir.Store;
+using WPF_Kifir.Windows;
 namespace WPF_Kifir
 {
     /// <summary>
@@ -26,24 +28,25 @@ namespace WPF_Kifir
     public partial class MainWindow : Window
     {
         ObservableCollection<Student> _students;
-        Window _new_student;
-        public MainWindow()
+        StudentStore _studentStore;
+        New_Student _newStudent;
+        public MainWindow(StudentStore store)
         {
             InitializeComponent();
-            _students = new();
+            _students = new();  
+            _studentStore = store;
+            _studentStore.OnStudentCreated += HandleStudent;
             dg_Students.ItemsSource = _students;
-            _new_student = new();
-            _new_student.Closing += HandleClose;
         }
 
-        private void HandleClose(object? sender, CancelEventArgs e)
+        private void HandleStudent(Student? student)
         {
-            //TODO: pass object and add it to the list
-            // Uj_diak window = sender as Uj_diak;
-            // if(window == null) return;
-            // dg_Students.Add(sender.NewStudent);
+            //Additional checks here
+            if (student == null) return;
+            _students.Add(student);
         }
 
+       
         async void Button_Event(object sender, RoutedEventArgs e)
         {
             Button btn = (sender as Button)!;
@@ -51,8 +54,8 @@ namespace WPF_Kifir
             switch (btn.Name[^1])
             {
                 case '1':
-                    //Implement
-                    _new_student.ShowDialog();
+                    _newStudent = new(_studentStore);
+                    _newStudent.ShowDialog();
                     break;
                 case '2':
                     if (dg_Students.SelectedIndex == -1) return;
@@ -82,6 +85,7 @@ namespace WPF_Kifir
                         await sw.WriteLineAsync($"{student.OM_Azon};{student.Name};{student.Cim};{student.DOBirth};{student.Email};" +
                             $"{student.Math_Points}; {student.Hung_Points}");
                     }
+
                 }
             }
         }
