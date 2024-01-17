@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WPF_Kifir
+namespace WPF_Kifir.Model
 {
     public record Student
     {
@@ -20,13 +20,13 @@ namespace WPF_Kifir
         }
 
         public string OM_Azon { get; set; }
-        public string Name { get;set; }
+        public string Name { get; set; }
         public string Cim { get; set; }
         public DateTime DOBirth { get; set; }
         public string Email { get; set; }
         public int Math_Points { get; set; }
         public int Hung_Points { get; set; }
-        
+
 
     }
 }

@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPF_Kifir.Model;
 using WPF_Kifir.Store;
 using WPF_Kifir.Windows;
 namespace WPF_Kifir
@@ -29,7 +30,7 @@ namespace WPF_Kifir
     {
         ObservableCollection<Student> _students;
         StudentStore _studentStore;
-        New_Student _newStudent;
+        New_Student? _newStudent;
         public MainWindow(StudentStore store)
         {
             InitializeComponent();
@@ -41,8 +42,7 @@ namespace WPF_Kifir
 
         private void HandleStudent(Student? student)
         {
-            //Additional checks here
-            if (student == null) return;
+            if (student is null) return;
             _students.Add(student);
         }
 
@@ -102,7 +102,7 @@ namespace WPF_Kifir
                     {
                         string? line = await reader!.ReadLineAsync();
                         _students.Add(new Student(
-                            line.Split(';')[0],
+                            line!.Split(';')[0],
                             line.Split(';')[1],
                             line.Split(';')[2],
                             DateTime.Parse(line.Split(';')[3]),
