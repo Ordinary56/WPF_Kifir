@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -20,6 +21,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WPF_Kifir.Model;
+using WPF_Kifir.Repositories;
 using WPF_Kifir.Store;
 using WPF_Kifir.Windows;
 namespace WPF_Kifir
@@ -31,14 +33,21 @@ namespace WPF_Kifir
     {
         ObservableCollection<IFelvetelizo> _students;
         StudentStore _studentStore;
+        KifirRepository _repo;
         New_Student? _newStudent;
-        public MainWindow(StudentStore store)
+        public MainWindow(StudentStore store, KifirRepository repo)
         {
             InitializeComponent();
-            _students = new();  
+            _students = new();
             _studentStore = store;
             _studentStore.OnStudentCreated += HandleStudent;
             dg_Students.ItemsSource = _students;
+            _repo = repo;
+            // TODO: adatbázisból való betöltés
+            // Tipp:
+            // Loaded += LoadFromDatabase
+            // async Task LoadFromDataBase()
+            // AddRange-el fel lehet venni az értékeket :)
         }
 
         private void HandleStudent(Student? student)
@@ -47,7 +56,7 @@ namespace WPF_Kifir
             _students.Add(student);
         }
 
-       
+
         async void Button_Event(object sender, RoutedEventArgs e)
         {
             Button btn = (sender as Button)!;
@@ -74,13 +83,13 @@ namespace WPF_Kifir
 
         }
 
-         async Task Export()
+        async Task Export()
         {
             SaveFileDialog sfd = new();
             sfd.Filter = "Comma Seperated Value | *.csv";
-            if(sfd.ShowDialog() == true)
+            if (sfd.ShowDialog() == true)
             {
-                
+
                 using (StreamWriter sw = new(sfd.FileName))
                 {
                     foreach (Student student in _students)
@@ -89,6 +98,24 @@ namespace WPF_Kifir
                     }
 
                 }
+            }
+        }
+        async Task LoadFromDatabase()
+        {
+            var result = await _repo.GetStudents();
+            try
+            {
+                foreach(Student student in result)
+                {
+                    _students.Add(student);
+                }
+            }
+            catch (Exception ex) 
+            {
+                #if DEBUG
+                   Debug.WriteLine(ex.ToString());  
+                #endif
+                throw;
             }
         }
 
