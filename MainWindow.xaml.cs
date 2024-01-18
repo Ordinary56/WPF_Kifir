@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace WPF_Kifir
     /// </summary>
     public partial class MainWindow : Window
     {
-        ObservableCollection<Student> _students;
+        ObservableCollection<IFelvetelizo> _students;
         StudentStore _studentStore;
         New_Student? _newStudent;
         public MainWindow(StudentStore store)
@@ -50,7 +51,7 @@ namespace WPF_Kifir
         async void Button_Event(object sender, RoutedEventArgs e)
         {
             Button btn = (sender as Button)!;
-            if (sender is not Button) return;
+            if (btn is null) return;
             switch (btn.Name[^1])
             {
                 case '1':
@@ -76,14 +77,15 @@ namespace WPF_Kifir
          async Task Export()
         {
             SaveFileDialog sfd = new();
+            sfd.Filter = "Comma Seperated Value | *.csv";
             if(sfd.ShowDialog() == true)
             {
+                
                 using (StreamWriter sw = new(sfd.FileName))
                 {
                     foreach (Student student in _students)
                     {
-                        await sw.WriteLineAsync($"{student.OM_Azon};{student.Name};{student.Cim};{student.DOBirth};{student.Email};" +
-                            $"{student.Math_Points}; {student.Hung_Points}");
+                        await sw.WriteLineAsync(student.CSVSortAdVissza());
                     }
 
                 }
@@ -93,14 +95,22 @@ namespace WPF_Kifir
         async Task Import()
         {
             OpenFileDialog ofd = new();
+            ofd.Filter = "Comma Seperated Value (.csv) | *.csv";
             if (ofd.ShowDialog() == true)
             {
+
+                MessageBoxResult result = MessageBox.Show("Felülírjuk?", "Choice", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _students.Clear();
+                }
                 using (StreamReader reader = new(ofd.FileName))
                 {
                     reader.ReadLine()!.Skip(1);
                     while (!reader.EndOfStream)
                     {
                         string? line = await reader!.ReadLineAsync();
+                        if (_students.Any(x => x.OM_Azonosito == line!.Split(';')[0])) continue;
                         _students.Add(new Student(
                             line!.Split(';')[0],
                             line.Split(';')[1],

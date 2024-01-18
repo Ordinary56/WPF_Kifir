@@ -48,6 +48,11 @@ namespace WPF_Kifir.Windows
         }
         void btn_Cancel_Click(object sender, RoutedEventArgs e) => this.Close(); 
 
+        void TextChanged(object? sender, TextChangedEventArgs e) 
+        {
+            
+        } 
+
         bool IsInputValid()
         {
            return new Regex(@"7255\d{7}",RegexOptions.Compiled | RegexOptions.Multiline).IsMatch(txt_OMid.Text) &&
