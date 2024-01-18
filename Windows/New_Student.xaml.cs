@@ -51,8 +51,8 @@ namespace WPF_Kifir.Windows
         bool IsInputValid()
         {
            return new Regex(@"7255\d{7}",RegexOptions.Compiled | RegexOptions.Multiline).IsMatch(txt_OMid.Text) &&
-                int.Parse(txt_Hungarian.Text) >= 0 && int.Parse(txt_Hungarian.Text) <= 50 &&
-                 int.Parse(txt_Maths.Text) >= 0 && int.Parse(txt_Maths.Text) <= 50;           
+                new Regex(@"^(?:[0-9]|[1-4][0-9]|50)$",RegexOptions.Compiled | RegexOptions.Multiline).IsMatch(txt_Maths.Text) &&
+                 new Regex(@"^(?:[0-9]|[1-4][0-9]|50)$", RegexOptions.Compiled | RegexOptions.Multiline).IsMatch(txt_Hungarian.Text);           
         }
     }
 }
