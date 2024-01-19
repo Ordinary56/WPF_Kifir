@@ -23,14 +23,24 @@ namespace WPF_Kifir.Windows
     public partial class New_Student : Window
     {
         readonly StudentStore _store;
+        Regex? _regex;
+        // Az összes mező helyességét bitekbek tároljuk el
+        // Ha az összes bit 1, akkor mindengyik helyes
+        // Ha nem, akkor a diák felvétel nem fog működni
+        // BitWise műveletekkel több teljesítményt érhetünk el
+        // A Magyart és matekot egybe nézzük, mert semelyik se lehet szöveg és 50 felett
+        //        0                 0         0
+        // Magyar és Matek Pont   Email  OM Azonosító
+        byte _flags;
         public New_Student(StudentStore store)
         {
             _store = store;
+            _flags = 0b000;
             InitializeComponent();
         }
         void btn_Add_Click(object sender, RoutedEventArgs e)
         {
-            if(!IsInputValid())
+            if(!(_flags == 0b111))
             {
                 MessageBox.Show("Valamelyik megadott mező helytelen","Error", MessageBoxButton.OK,MessageBoxImage.Error);
                 return;
@@ -50,14 +60,30 @@ namespace WPF_Kifir.Windows
 
         void TextChanged(object? sender, TextChangedEventArgs e) 
         {
-            
+            TextBox tb = (sender as TextBox)!;
+            if (tb == null) return;
+            switch (tb.Name.Split('_')[1][0])
+            {
+                //Abban az esetben, hogy a kiválasztott textbox regexje igaz, akkor a _flags bitjék 1-re váltjuk
+                // Az átváltás így néz ki
+                // 1 << x -> x-szer toljuk balra az 1-et
+                // _flags | (1 << x) -> OR művelet, így ezáltal 1 (igaz) lesz az értéke
+                // ~( 1 << x) -> x-szer toljuk balra az 1-et és vegyük az ellentétjét (0)
+                // _flags & ~(1 << x) -> És művelettel azt az 1 bitet 0-ra állítjuk
+                case 'O':
+                    _regex = new(@"7255\d{7}");
+                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | 1 ) : (_flags &~ 1));
+                    break;
+                case 'E':
+                    _flags = (byte)(_flags | (1 << 1));
+                    break;
+                case 'M':
+                case 'H':
+                    _regex = new(@"^(?:[0-9]|[0-4][0-9]|50)$", RegexOptions.Multiline);
+                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 2)) : _flags & ~(1 << 2));
+                    break;
+            }
         } 
 
-        bool IsInputValid()
-        {
-           return new Regex(@"7255\d{7}",RegexOptions.Compiled | RegexOptions.Multiline).IsMatch(txt_OMid.Text) &&
-                new Regex(@"^(?:[0-9]|[1-4][0-9]|50)$",RegexOptions.Compiled | RegexOptions.Multiline).IsMatch(txt_Maths.Text) &&
-                 new Regex(@"^(?:[0-9]|[1-4][0-9]|50)$", RegexOptions.Compiled | RegexOptions.Multiline).IsMatch(txt_Hungarian.Text);           
-        }
-    }
+}
 }

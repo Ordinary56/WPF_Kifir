@@ -9,13 +9,13 @@ namespace WPF_Kifir.Repositories
 {
     public abstract class RepositoryBase
     {
-        private readonly string _connectionstring = "datasource=127.0.01;port=3306;database=kifir";
-        public MySqlConnection GetConnection()
+        private readonly string _connectionstring = "datasource=127.0.01;port=3306;database=kifir;username=root;password=";
+        protected MySqlConnection GetConnection()
         {
             return new MySqlConnection(_connectionstring);
         }
 
-        public string[] GetEntireRow(DbDataReader reader)
+        protected string[] GetEntireRow(DbDataReader reader)
         {
             // Oszlopok száma
             int rowcount = reader.FieldCount;

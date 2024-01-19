@@ -10,6 +10,7 @@ namespace WPF_Kifir.Repositories
 {
     public class KifirRepository : RepositoryBase
     {
+        
 
         public async Task<List<Student>> GetStudents()
         {
@@ -17,7 +18,7 @@ namespace WPF_Kifir.Repositories
             using (MySqlConnection connection = GetConnection())
             {
                 await connection.OpenAsync();
-                using (MySqlCommand cmd = new("SELECT * FROM kifir"))
+                using (MySqlCommand cmd = new("SELECT * FROM kifir",connection))
                 {
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {

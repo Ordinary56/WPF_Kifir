@@ -102,7 +102,7 @@ namespace WPF_Kifir
         }
         async Task LoadFromDatabase()
         {
-            var result = await _repo.GetStudents();
+            List<Student>? result = await _repo.GetStudents();
             try
             {
                 foreach(Student student in result)
