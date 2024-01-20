@@ -101,10 +101,9 @@ namespace WPF_Kifir
         }
         async Task LoadFromDatabase()
         {
-            List<Student>? result = await _repo.GetStudentsAsync();
             try
             {
-                foreach(Student student in result)
+                await foreach(Student? student in _repo.GetStudentsAsync())
                 {
                     _students.Add(student);
                 }
