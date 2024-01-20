@@ -1,7 +1,27 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-<!-- Templates go here!!  -->
-    
-    
+    <!-- Templates go here!!  -->
+    <Style TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" 
+                            CornerRadius="5">
+                        <Grid Margin=" 3 2" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                              Content="{TemplateBinding Content}"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+                
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

@@ -35,14 +35,15 @@ namespace WPF_Kifir.Windows
         public New_Student(StudentStore store)
         {
             _store = store;
+            //lehet 0 is, de így sokkal olvashatóbb
             _flags = 0b000;
             InitializeComponent();
         }
         void btn_Add_Click(object sender, RoutedEventArgs e)
         {
-            if(!(_flags == 0b111))
+            if (!(_flags == 0b111))
             {
-                MessageBox.Show("Valamelyik megadott mező helytelen","Error", MessageBoxButton.OK,MessageBoxImage.Error);
+                MessageBox.Show("Valamelyik megadott mező helytelen", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             _store.GetStudent(new Student(
@@ -56,9 +57,9 @@ namespace WPF_Kifir.Windows
 
             this.Close();
         }
-        void btn_Cancel_Click(object sender, RoutedEventArgs e) => this.Close(); 
+        void btn_Cancel_Click(object sender, RoutedEventArgs e) => this.Close();
 
-        void TextChanged(object? sender, TextChangedEventArgs e) 
+        void TextChanged(object? sender, TextChangedEventArgs e)
         {
             TextBox tb = (sender as TextBox)!;
             if (tb == null) return;
@@ -68,11 +69,11 @@ namespace WPF_Kifir.Windows
                 // Az átváltás így néz ki
                 // 1 << x -> x-szer toljuk balra az 1-et
                 // _flags | (1 << x) -> OR művelet, így ezáltal 1 (igaz) lesz az értéke
-                // ~( 1 << x) -> x-szer toljuk balra az 1-et és vegyük az ellentétjét (0)
+                // ~( 1 << x) -> x-szer toljuk balra az 1-et és vegyük a komplemensét (az összes 0 bit 1 lesz és így fordítva)
                 // _flags & ~(1 << x) -> És művelettel azt az 1 bitet 0-ra állítjuk
                 case 'O':
-                    _regex = new(@"7255\d{7}");
-                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | 1 ) : (_flags &~ 1));
+                    _regex = new(@"^7255\d{7}$", RegexOptions.Multiline);
+                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | 1) : (_flags & ~1));
                     break;
                 case 'E':
                     _flags = (byte)(_flags | (1 << 1));
@@ -83,7 +84,7 @@ namespace WPF_Kifir.Windows
                     _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 2)) : _flags & ~(1 << 2));
                     break;
             }
-        } 
+        }
 
-}
+    }
 }

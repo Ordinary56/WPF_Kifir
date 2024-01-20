@@ -43,11 +43,10 @@ namespace WPF_Kifir
             _studentStore.OnStudentCreated += HandleStudent;
             dg_Students.ItemsSource = _students;
             _repo = repo;
-            // TODO: adatbázisból való betöltés
+            // TODO: adatbázisból való betöltés (később)
             // Tipp:
             // Loaded += LoadFromDatabase
             // async Task LoadFromDataBase()
-            // AddRange-el fel lehet venni az értékeket :)
         }
 
         private void HandleStudent(Student? student)
@@ -102,7 +101,7 @@ namespace WPF_Kifir
         }
         async Task LoadFromDatabase()
         {
-            List<Student>? result = await _repo.GetStudents();
+            List<Student>? result = await _repo.GetStudentsAsync();
             try
             {
                 foreach(Student student in result)

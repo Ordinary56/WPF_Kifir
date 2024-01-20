@@ -12,7 +12,7 @@ namespace WPF_Kifir.Repositories
     {
         
 
-        public async Task<List<Student>> GetStudents()
+        public async Task<List<Student>> GetStudentsAsync()
         {
             List<Student> result = new();
             using (MySqlConnection connection = GetConnection())
@@ -37,6 +37,7 @@ namespace WPF_Kifir.Repositories
                                     )
                                 );
                         }
+                        await reader.CloseAsync();
                     }
                 }
             }
