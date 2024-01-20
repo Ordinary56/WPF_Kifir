@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using WPF_Kifir.Interfaces;
 namespace WPF_Kifir.Model
 {
     public class Student : IFelvetelizo

@@ -14,30 +14,24 @@ namespace WPF_Kifir.Repositories
 
         public async IAsyncEnumerable<Student?> GetStudentsAsync()
         {
-            using (MySqlConnection connection = GetConnection())
+            using MySqlConnection connection = GetConnection();
+            await connection.OpenAsync();
+            using MySqlCommand cmd = new("SELECT * FROM kifir", connection);
+            using System.Data.Common.DbDataReader reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
-                await connection.OpenAsync();
-                using (MySqlCommand cmd = new("SELECT * FROM kifir", connection))
-                {
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            //Ennek létezhez egyszerűbb módja, mint hogy Reader.GetString, GetInt16 és hasonló
-                            string[] fields = GetEntireRow(reader);
-                            yield return new Student(
-                                fields[0],
-                                fields[1],
-                                fields[2],
-                                DateTime.Parse(fields[3]),
-                                fields[4],
-                                int.Parse(fields[5]),
-                                int.Parse(fields[^1]));
-                        }
-                        await reader.CloseAsync();
-                    }
-                }
+                //Ennek létezhez egyszerűbb módja, mint hogy Reader.GetString, GetInt16 és hasonló
+                string[] fields = GetEntireRow(reader);
+                yield return new Student(
+                    fields[0],
+                    fields[1],
+                    fields[2],
+                    DateTime.Parse(fields[3]),
+                    fields[4],
+                    int.Parse(fields[5]),
+                    int.Parse(fields[^1]));
             }
+            await reader.CloseAsync();
         }
 
     }

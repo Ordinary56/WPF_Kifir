@@ -1,4 +1,6 @@
 ﻿using System;
+namespace WPF_Kifir.Interfaces
+{
     public interface IFelvetelizo
     {
 
@@ -14,4 +16,4 @@
 
         void ModositCSVSorral(String csvString);
     }
-
+}

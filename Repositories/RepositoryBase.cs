@@ -15,11 +15,10 @@ namespace WPF_Kifir.Repositories
             return new MySqlConnection(_connectionstring);
         }
 
-        protected string[] GetEntireRow(DbDataReader reader)
+        protected static string[] GetEntireRow(DbDataReader reader)
         {
             // Oszlopok száma
             int rowcount = reader.FieldCount;
-
             string[] values = new string[rowcount];
             for(int i = 0; i < rowcount; i++)
             {

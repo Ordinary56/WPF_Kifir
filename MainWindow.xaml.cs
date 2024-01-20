@@ -20,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPF_Kifir.Interfaces;
 using WPF_Kifir.Model;
 using WPF_Kifir.Repositories;
 using WPF_Kifir.Store;
@@ -31,9 +32,9 @@ namespace WPF_Kifir
     /// </summary>
     public partial class MainWindow : Window
     {
-        ObservableCollection<IFelvetelizo> _students;
-        StudentStore _studentStore;
-        KifirRepository _repo;
+        readonly ObservableCollection<IFelvetelizo> _students;
+        readonly StudentStore _studentStore;
+        readonly KifirRepository _repo;
         New_Student? _newStudent;
         public MainWindow(StudentStore store, KifirRepository repo)
         {
@@ -84,18 +85,19 @@ namespace WPF_Kifir
 
         async Task Export()
         {
-            SaveFileDialog sfd = new();
-            sfd.Filter = "Comma Seperated Value | *.csv";
+            SaveFileDialog sfd = new()
+            {
+                Filter = "Comma Seperated Value | *.csv"
+            };
             if (sfd.ShowDialog() == true)
             {
 
-                using (StreamWriter sw = new(sfd.FileName))
+                using StreamWriter sw = new(sfd.FileName);
+                // Kell plusz mezőneveket írni különben az elsőt mindig kihagyja importnál
+                await sw.WriteAsync("Om_Azonosito;Nev;Ertesitesi_Cim;Szuletesi_Datum;Email;Matek;Magyar");
+                foreach (IFelvetelizo student in _students)
                 {
-                    foreach (Student student in _students)
-                    {
-                        await sw.WriteLineAsync(student.CSVSortAdVissza());
-                    }
-
+                    await sw.WriteLineAsync(student.CSVSortAdVissza());
                 }
             }
         }
@@ -103,15 +105,15 @@ namespace WPF_Kifir
         {
             try
             {
-                await foreach(Student? student in _repo.GetStudentsAsync())
+                await foreach (Student? student in _repo.GetStudentsAsync())
                 {
-                    _students.Add(student);
+                    _students.Add(student!);
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 #if DEBUG
-                   Debug.WriteLine(ex.ToString());  
+                    Debug.WriteLine(ex.Message);
                 #endif
                 throw;
             }
@@ -119,8 +121,10 @@ namespace WPF_Kifir
 
         async Task Import()
         {
-            OpenFileDialog ofd = new();
-            ofd.Filter = "Comma Seperated Value (.csv) | *.csv";
+            OpenFileDialog ofd = new()
+            {
+                Filter = "Comma Seperated Value (.csv) | *.csv"
+            };
             if (ofd.ShowDialog() == true)
             {
 
@@ -129,29 +133,23 @@ namespace WPF_Kifir
                 {
                     _students.Clear();
                 }
-                using (StreamReader reader = new(ofd.FileName))
+                using StreamReader reader = new(ofd.FileName);
+                reader.ReadLine()!.Skip(1);
+                while (!reader.EndOfStream)
                 {
-                    reader.ReadLine()!.Skip(1);
-                    while (!reader.EndOfStream)
-                    {
-                        string? line = await reader!.ReadLineAsync();
-                        if (_students.Any(x => x.OM_Azonosito == line!.Split(';')[0])) continue;
-                        _students.Add(new Student(
-                            line!.Split(';')[0],
-                            line.Split(';')[1],
-                            line.Split(';')[2],
-                            DateTime.Parse(line.Split(';')[3]),
-                            line.Split(';')[4],
-                            int.Parse(line.Split(';')[5]),
-                            int.Parse(line.Split(';')[6])
-                            ));
-                    }
+                    string? line = await reader!.ReadLineAsync();
+                    if (_students.Any(x => x.OM_Azonosito == line!.Split(';')[0])) continue;
+                    _students.Add(new Student(
+                        line!.Split(';')[0],
+                        line.Split(';')[1],
+                        line.Split(';')[2],
+                        DateTime.Parse(line.Split(';')[3]),
+                        line.Split(';')[4],
+                        int.Parse(line.Split(';')[5]),
+                        int.Parse(line.Split(';')[6])
+                        ));
                 }
             }
         }
-
-
-
-
     }
 }
