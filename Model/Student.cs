@@ -29,7 +29,7 @@ namespace WPF_Kifir.Model
 
         public string CSVSortAdVissza()
         {
-            return $"{this.OM_Azonosito};{this.Neve};{this.ErtesitesiCime};{this.Email};{this.SzuletesiDatum.ToShortDateString()};" +
+            return $"{this.OM_Azonosito};{this.Neve};{this.ErtesitesiCime};{this.SzuletesiDatum.ToShortDateString()};{this.Email};" +
                 $"{this.Matematika};{this.Magyar}";
         }
 

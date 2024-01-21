@@ -21,13 +21,13 @@
                   CanUserDeleteRows="False"
                   CanUserReorderColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="OM Azonosító"/>
-                <DataGridTextColumn Header="Név"/>
-                <DataGridTextColumn Header="Értesítési Cím"/>
-                <DataGridTextColumn Header="Születési Dátum"/>
-                <DataGridTextColumn Header="Email"/>
-                <DataGridTextColumn Header="Matek"/>
-                <DataGridTextColumn Header="Magyar"/>
+                <DataGridTextColumn Header="OM Azonosító" Binding="{Binding Path=OM_Azonosito}"/>
+                <DataGridTextColumn Header="Név" Binding="{Binding Path=Neve}"/>
+                <DataGridTextColumn Header="Értesítési Cím" Binding="{Binding Path=ErtesitesiCime}"/>
+                <DataGridTextColumn Header="Születési Dátum" Binding="{Binding Path=SzuletesiDatum}"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Path=Email}"/>
+                <DataGridTextColumn  Header="Matek" Binding="{Binding Path=Matematika}"/>
+                <DataGridTextColumn Width="1*" Header="Magyar" Binding="{Binding Path=Magyar}"/>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Column="1">

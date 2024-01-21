@@ -59,7 +59,8 @@ namespace WPF_Kifir
 
         async void Button_Event(object sender, RoutedEventArgs e)
         {
-            Button btn = (sender as Button)!;
+            // Feltéve ha egy nagyokos máshoz kötné
+            Button? btn = sender as Button;
             if (btn is null) return;
             switch (btn.Name[^1])
             {
@@ -89,12 +90,12 @@ namespace WPF_Kifir
             {
                 Filter = "Comma Seperated Value | *.csv"
             };
-            if (sfd.ShowDialog() == true)
+            if ((bool)sfd.ShowDialog()!)
             {
 
                 using StreamWriter sw = new(sfd.FileName);
                 // Kell plusz mezőneveket írni különben az elsőt mindig kihagyja importnál
-                await sw.WriteAsync("Om_Azonosito;Nev;Ertesitesi_Cim;Szuletesi_Datum;Email;Matek;Magyar");
+                await sw.WriteLineAsync("Om_Azonosito;Nev;Ertesitesi_Cim;Szuletesi_Datum;Email;Matek;Magyar");
                 foreach (IFelvetelizo student in _students)
                 {
                     await sw.WriteLineAsync(student.CSVSortAdVissza());
