@@ -12,10 +12,24 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <DataGrid  x:Name="dg_Students"/>
+        <DataGrid Grid.RowSpan="2" x:Name="dg_Students" 
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  CanUserReorderColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="OM Azonosító"/>
+                <DataGridTextColumn Header="Név"/>
+                <DataGridTextColumn Header="Értesítési Cím"/>
+                <DataGridTextColumn Header="Születési Dátum"/>
+                <DataGridTextColumn Header="Email"/>
+                <DataGridTextColumn Header="Matek"/>
+                <DataGridTextColumn Header="Magyar"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <StackPanel Grid.Column="1">
             <Button Content="Új diák" x:Name="B_1" Margin="20 20" Click="Button_Event" />
             <Button Content="Törlés" x:Name="B_2"  Margin="20 20" Click="Button_Event"/>

@@ -23,16 +23,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="DataGrid">
-        <Setter Property="RowDetailsTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <Border>
-                        
-                    </Border>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
 </ResourceDictionary>
