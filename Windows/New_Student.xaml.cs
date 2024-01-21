@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Xps.Packaging;
 using WPF_Kifir.Model;
 using WPF_Kifir.Store;
 
@@ -72,7 +73,7 @@ namespace WPF_Kifir.Windows
                 // ~( 1 << x) -> x-szer toljuk balra az 1-et és vegyük a komplemensét (az összes 0 bit 1 lesz és így fordítva)
                 // _flags & ~(1 << x) -> És művelettel azt az 1 bitet 0-ra állítjuk
                 case 'O':
-                    _regex = new(@"^7255\d{7}$", RegexOptions.Multiline);
+                    _regex = OM_Regex();
                     _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | 1) : (_flags & ~1));
                     break;
                 case 'E':
@@ -80,11 +81,15 @@ namespace WPF_Kifir.Windows
                     break;
                 case 'M':
                 case 'H':
-                    _regex = new(@"^(?:[0-9]|[0-4][0-9]|50)$", RegexOptions.Multiline);
+                    _regex = Points();
                     _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 2)) : _flags & ~(1 << 2));
                     break;
             }
         }
+        [GeneratedRegex(@"^7255\d{7}$", RegexOptions.Multiline)]
+        private partial Regex OM_Regex();
 
+        [GeneratedRegex(@"^(?:[0-9]|[0-4][0-9]|50)$", RegexOptions.Multiline)]
+        private partial Regex Points();
     }
 }
