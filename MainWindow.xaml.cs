@@ -60,7 +60,7 @@ namespace WPF_Kifir
         async void Button_Event(object sender, RoutedEventArgs e)
         {
             // Feltéve ha egy nagyokos máshoz kötné
-            Button? btn = sender as Button;
+                Button? btn = sender as Button;
             if (btn is null) return;
             switch (btn.Name[^1])
             {

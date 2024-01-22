@@ -19,9 +19,15 @@
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
-                
             </Setter.Value>
         </Setter>
+    </Style>
+    <Style x:Key="MB_Button" TargetType="Button">
+        <Setter Property="MinWidth" Value="88"/>
+        <Setter Property="MaxWidth" Value="160"/>
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="Margin" Value="5 0"/>
+
     </Style>
 
 </ResourceDictionary>

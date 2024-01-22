@@ -30,19 +30,17 @@ namespace WPF_Kifir.Windows
         // Ha nem, akkor a diák felvétel nem fog működni
         // BitWise műveletekkel több teljesítményt érhetünk el
         // A Magyart és matekot egybe nézzük, mert semelyik se lehet szöveg és 50 felett
-        //        0                 0         0
-        // Magyar és Matek Pont   Email  OM Azonosító
         byte _flags;
         public New_Student(StudentStore store)
         {
             _store = store;
             //lehet 0 is, de így sokkal olvashatóbb
-            _flags = 0b000;
+            _flags = 0b0000;
             InitializeComponent();
         }
         void btn_Add_Click(object sender, RoutedEventArgs e)
         {
-            if (!(_flags == 0b111))
+            if (!(_flags == 0b1111))
             {
                 MessageBox.Show("Valamelyik megadott mező helytelen", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -78,12 +76,15 @@ namespace WPF_Kifir.Windows
                     break;
                 case 'E':
                     _regex = Email();
-                    _flags = (byte)(_regex.IsMatch(txt_Email.Text) ?  _flags | (1 << 1) : _flags & ~(1 << 1));
+                    _flags = (byte)(_regex.IsMatch(tb.Text) ?  _flags | (1 << 1) : _flags & ~(1 << 1));
                     break;
                 case 'M':
-                case 'H':
                     _regex = Points();
                     _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 2)) : _flags & ~(1 << 2));
+                    break;
+                case 'H':
+                    _regex = Points();
+                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 3)) : _flags & ~(1 << 3));
                     break;
             }
         }
