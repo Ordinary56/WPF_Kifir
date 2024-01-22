@@ -66,7 +66,7 @@ namespace WPF_Kifir.Windows
             if (tb == null) return;
             switch (tb.Name.Split('_')[1][0])
             {
-                //Abban az esetben, hogy a kiválasztott textbox regexje igaz, akkor a _flags bitjék 1-re váltjuk
+                // Abban az esetben, hogy a kiválasztott textbox regexje igaz, akkor a _flags bitjék 1-re váltjuk
                 // Az átváltás így néz ki
                 // 1 << x -> x-szer toljuk balra az 1-et
                 // _flags | (1 << x) -> OR művelet, így ezáltal 1 (igaz) lesz az értéke
@@ -77,7 +77,8 @@ namespace WPF_Kifir.Windows
                     _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | 1) : (_flags & ~1));
                     break;
                 case 'E':
-                    _flags = (byte)(_flags | (1 << 1));
+                    _regex = Email();
+                    _flags = (byte)(_regex.IsMatch(txt_Email.Text) ?  _flags | (1 << 1) : _flags & ~(1 << 1));
                     break;
                 case 'M':
                 case 'H':
@@ -91,5 +92,7 @@ namespace WPF_Kifir.Windows
 
         [GeneratedRegex(@"^(?:[0-9]|[0-4][0-9]|50)$", RegexOptions.Multiline)]
         private partial Regex Points();
+        [GeneratedRegex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", RegexOptions.Multiline)]
+        private partial Regex Email();
     }
 }

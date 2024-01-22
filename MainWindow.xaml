@@ -8,14 +8,14 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="3.3*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <DataGrid Grid.RowSpan="2" x:Name="dg_Students" 
+        <DataGrid  x:Name="dg_Students" 
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
@@ -36,5 +36,6 @@
             <Button Content="Import" x:Name="B_3" Margin="20 20" Click="Button_Event"/>
             <Button Content="Export" x:Name="B_4"  Margin="20 20" Click="Button_Event"/>
         </StackPanel>
+        <ListBox x:Name="lb_CsvSor" Grid.Row="1" Grid.ColumnSpan="2" Background="LightBlue"/>
     </Grid>
 </Window>
