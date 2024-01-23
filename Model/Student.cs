@@ -8,6 +8,7 @@ namespace WPF_Kifir.Model
 {
     public class Student : IFelvetelizo
     {
+        public Student() { }
         public Student(string csvString)
         {
             ModositCSVSorral(csvString);

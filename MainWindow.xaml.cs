@@ -133,7 +133,7 @@ namespace WPF_Kifir
 
             OpenFileDialog ofd = new()
             {
-                Filter = "Comma Seperated Value (.csv) | *.csv"
+                Filter = "Comma Seperated Value (.csv) | *.csv | JavaScript Object Notation (JSON) | *.json"
             };
             if ((bool)ofd.ShowDialog()!)
             {
@@ -153,10 +153,10 @@ namespace WPF_Kifir
             switch(System.IO.Path.GetExtension(ofd.FileName))
             {
                 case ".json":
-                    using (FileStream stream = File.Open(ofd.FileName,FileMode.Open))
+                    using (FileStream stream = File.OpenRead(ofd.FileName))
                     {
                         Student[]? json_data = await JsonSerializer.DeserializeAsync<Student[]>(stream);
-                        foreach(Student student in json_data!)
+                        foreach (Student student in json_data)
                         {
                             if (_students.Any(x => x.OM_Azonosito == student.OM_Azonosito) || student is null) continue;
                             _students.Add(student);
