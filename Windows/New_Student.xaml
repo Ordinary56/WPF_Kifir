@@ -5,19 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_Kifir.Windows"
         mc:Ignorable="d"
-        Title="New_Student" Height="450" Width="800">
+        ResizeMode="NoResize"
+        Title="New_Student" Height="480" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="550"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="550" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="350"/>
-            <RowDefinition/>
+            <RowDefinition Height="350" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
+                <ColumnDefinition />
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -41,14 +42,14 @@
             <TextBox x:Name="txt_OMid" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TextChanged="TextChanged"/>
             <TextBox x:Name="txt_Name" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" />
             <TextBox x:Name="txt_Address" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
-            <DatePicker x:Name="dp_DOB" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
+            <DatePicker Text="2000.01.01" x:Name="dp_DOB" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
             <TextBox x:Name="txt_Email" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextChanged="TextChanged"/>
             <TextBox x:Name="txt_Maths" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" TextChanged="TextChanged"/>
             <TextBox x:Name="txt_Hungarian" Grid.Row="6" Grid.Column="1"  VerticalAlignment="Center" TextChanged="TextChanged"/>
         </Grid>
         <StackPanel Grid.Row="1" Grid.Column="1">
-            <Button Content="Új diák felvétele" Click="btn_Add_Click" Margin="0 0 0 20"/>
-            <Button Content="Mégse" Click="btn_Cancel_Click"/>
+            <Button Content="Új diák felvétele" Click="btn_Add_Click" Margin="10 10"/>
+            <Button Content="Mégse" Click="btn_Cancel_Click" Margin="10 0"/>
         </StackPanel>
     </Grid>
 </Window>

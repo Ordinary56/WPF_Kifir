@@ -29,7 +29,6 @@ namespace WPF_Kifir.Windows
         // Ha az összes bit 1, akkor mindengyik helyes
         // Ha nem, akkor a diák felvétel nem fog működni
         // BitWise műveletekkel több teljesítményt érhetünk el
-        // A Magyart és matekot egybe nézzük, mert semelyik se lehet szöveg és 50 felett
         byte _flags;
         public New_Student(StudentStore store)
         {
@@ -76,7 +75,7 @@ namespace WPF_Kifir.Windows
                     break;
                 case 'E':
                     _regex = Email();
-                    _flags = (byte)(_regex.IsMatch(tb.Text) ?  _flags | (1 << 1) : _flags & ~(1 << 1));
+                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 1)) : (_flags & ~(1 << 1)));
                     break;
                 case 'M':
                     _regex = Points();
@@ -85,6 +84,8 @@ namespace WPF_Kifir.Windows
                 case 'H':
                     _regex = Points();
                     _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 3)) : _flags & ~(1 << 3));
+                    break;
+                default:
                     break;
             }
         }

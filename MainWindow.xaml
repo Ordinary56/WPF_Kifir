@@ -34,8 +34,7 @@
             <Button Content="Új diák" x:Name="B_1" Margin="20 20" Click="Button_Event" />
             <Button Content="Törlés" x:Name="B_2"  Margin="20 20" Click="Button_Event"/>
             <Button Content="Import" x:Name="B_3" Margin="20 20" Click="Button_Event"/>
-            <Button Content="Export" x:Name="B_4"  Margin="20 20" Click="Button_Event"/>
+            <Button Content="Export" x:Name="B_4"  Margin="20 20" Click="Button_Event" />
         </StackPanel>
-        <ListBox x:Name="lb_CsvSor" Grid.Row="1" Grid.ColumnSpan="2" Background="LightBlue"/>
     </Grid>
 </Window>

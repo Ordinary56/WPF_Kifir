@@ -3,6 +3,7 @@
 
     <!-- Templates go here!!  -->
     <Style TargetType="Button">
+        <Setter Property="Height" Value="35"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -16,6 +17,9 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="#555956"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -52,7 +52,7 @@ namespace WPF_Kifir
 
         private void HandleStudent(Student? student)
         {
-            if (student is null) return;
+            if (student is null || _students.Any(x => x.OM_Azonosito == student.OM_Azonosito)) return;
             _students.Add(student);
         }
 
@@ -60,7 +60,7 @@ namespace WPF_Kifir
         async void Button_Event(object sender, RoutedEventArgs e)
         {
             // Feltéve ha egy nagyokos máshoz kötné
-                Button? btn = sender as Button;
+            Button? btn = sender as Button;
             if (btn is null) return;
             switch (btn.Name[^1])
             {
@@ -88,68 +88,93 @@ namespace WPF_Kifir
         {
             SaveFileDialog sfd = new()
             {
-                Filter = "Comma Seperated Value | *.csv"
+                Filter = "Comma Seperated Value | *.csv | JavaScript Object Notation (JSON) | *.json"
             };
             if ((bool)sfd.ShowDialog()!)
             {
-
-                using StreamWriter sw = new(sfd.FileName);
-                // Kell plusz mezőneveket írni különben az elsőt mindig kihagyja importnál
-                await sw.WriteLineAsync("Om_Azonosito;Nev;Ertesitesi_Cim;Szuletesi_Datum;Email;Matek;Magyar");
-                foreach (IFelvetelizo student in _students)
-                {
-                    await sw.WriteLineAsync(student.CSVSortAdVissza());
-                }
+                B_3.IsEnabled = false;
+                await SaveAs(sfd);
             }
+            B_3.IsEnabled = true;
         }
-        async Task LoadFromDatabase()
+
+        private async Task SaveAs(SaveFileDialog sfd)
         {
-            try
+            switch (System.IO.Path.GetExtension(sfd.FileName))
             {
-                await foreach (Student? student in _repo.GetStudentsAsync())
-                {
-                    _students.Add(student!);
-                }
-            }
-            catch (Exception ex)
-            {
-                #if DEBUG
-                    Debug.WriteLine(ex.Message);
-                #endif
-                throw;
+                case ".json":
+                    JsonSerializerOptions opt = new()
+                    {
+                        WriteIndented = true,
+                        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                    };
+                    string json_data = JsonSerializer.Serialize(_students, opt);
+                    await File.WriteAllLinesAsync(sfd.FileName, json_data.Split('\n'));
+                    break;
+                case ".csv":
+                    using (StreamWriter sw = new(sfd.FileName))
+                    {
+                        // Kell plusz mezőneveket írni különben az elsőt mindig kihagyja importnál
+                        await sw.WriteLineAsync("Om_Azonosito;Nev;Ertesitesi_Cim;Szuletesi_Datum;Email;Matek;Magyar");
+                        foreach (IFelvetelizo student in _students)
+                        {
+                            await sw.WriteLineAsync(student.CSVSortAdVissza());
+                        }
+                    }
+                    break;
+                default:
+                    break;
+
             }
         }
 
         async Task Import()
         {
+
             OpenFileDialog ofd = new()
             {
                 Filter = "Comma Seperated Value (.csv) | *.csv"
             };
-            if (ofd.ShowDialog() == true)
+            if ((bool)ofd.ShowDialog()!)
             {
-
+                B_4.IsEnabled = false;
                 MessageBoxResult result = MessageBox.Show("Felülírjuk?", "Choice", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
+                if (result == MessageBoxResult.Yes && _students.Count < 1)
                 {
                     _students.Clear();
                 }
-                using StreamReader reader = new(ofd.FileName);
-                reader.ReadLine()!.Skip(1);
-                while (!reader.EndOfStream)
-                {
-                    string? line = await reader!.ReadLineAsync();
-                    if (_students.Any(x => x.OM_Azonosito == line!.Split(';')[0])) continue;
-                    _students.Add(new Student(
-                        line!.Split(';')[0],
-                        line.Split(';')[1],
-                        line.Split(';')[2],
-                        DateTime.Parse(line.Split(';')[3]),
-                        line.Split(';')[4],
-                        int.Parse(line.Split(';')[5]),
-                        int.Parse(line.Split(';')[6])
-                        ));
-                }
+                await OpenAs(ofd);
+            }
+            B_4.IsEnabled = true;
+        }
+
+        async Task OpenAs(OpenFileDialog ofd)
+        {
+            switch(System.IO.Path.GetExtension(ofd.FileName))
+            {
+                case ".json":
+                    using (FileStream stream = File.Open(ofd.FileName,FileMode.Open))
+                    {
+                        Student[]? json_data = await JsonSerializer.DeserializeAsync<Student[]>(stream);
+                        foreach(Student student in json_data!)
+                        {
+                            if (_students.Any(x => x.OM_Azonosito == student.OM_Azonosito) || student is null) continue;
+                            _students.Add(student);
+                        }
+                    }
+                    break;
+                case ".csv":
+                    using (StreamReader reader = new(ofd.FileName))
+                    {
+                        reader.ReadLine()!.Skip(1);
+                        while (!reader.EndOfStream)
+                        {
+                            string? line = await reader!.ReadLineAsync();
+                            if (_students.Any(x => x.OM_Azonosito == line!.Split(';')[0])) continue;
+                            _students.Add(new Student(line!));
+                        }
+                    }
+                    break;
             }
         }
     }
