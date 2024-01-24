@@ -34,12 +34,12 @@ namespace WPF_Kifir.Windows
         {
             _store = store;
             //lehet 0 is, de így sokkal olvashatóbb
-            _flags = 0b0000;
+            _flags = 0b00000;
             InitializeComponent();
         }
         void btn_Add_Click(object sender, RoutedEventArgs e)
         {
-            if (!(_flags == 0b1111))
+            if (!(_flags == 0b11111))
             {
                 MessageBox.Show("Valamelyik megadott mező helytelen", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -72,23 +72,43 @@ namespace WPF_Kifir.Windows
                 case 'O':
                     _regex = OM_Regex();
                     _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | 1) : (_flags & ~1));
+                    DisplayErrorMessage(tb.Name.Split('_')[1],0);
+                    break;
+                case 'N':
+                    break;
+                case 'A':
+                    _flags = (byte)(tb.Text.Length > 0 ? (_flags | (1 << 1)) : (_flags &~ (1 << 1)));
+                    DisplayErrorMessage(tb.Name.Split('_')[1],1);
                     break;
                 case 'E':
                     _regex = Email();
-                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 1)) : (_flags & ~(1 << 1)));
+                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 2)) : (_flags & ~(1 << 3)));
+                    DisplayErrorMessage(tb.Name.Split('_')[1],2);
                     break;
                 case 'M':
                     _regex = Points();
-                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 2)) : _flags & ~(1 << 2));
+                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 3)) : _flags & ~(1 << 4));
+                    DisplayErrorMessage(tb.Name.Split('_')[1],3);
                     break;
                 case 'H':
                     _regex = Points();
-                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 3)) : _flags & ~(1 << 3));
+                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 4)) : _flags & ~(1 << 4));
+                    DisplayErrorMessage(tb.Name.Split('_')[1],4);
                     break;
                 default:
                     break;
             }
         }
+        void DisplayErrorMessage(string labelname, byte nth_bit)
+        {
+            TextBlock? TargetBlock = FindName($"tbl_{labelname}") as TextBlock;
+            if (TargetBlock == null) return;
+            TargetBlock.Visibility = (byte)((_flags >> nth_bit) & 1) == 1 ? Visibility.Collapsed : Visibility.Visible;
+
+        }
+        #region Regex
+        [GeneratedRegex(@"[A-Z]\w+\s[A-Z]\w+")]
+        private partial Regex Name_Regex();
         [GeneratedRegex(@"^7255\d{7}$", RegexOptions.Multiline)]
         private partial Regex OM_Regex();
 
@@ -96,5 +116,6 @@ namespace WPF_Kifir.Windows
         private partial Regex Points();
         [GeneratedRegex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", RegexOptions.Multiline)]
         private partial Regex Email();
+        #endregion
     }
 }

@@ -21,8 +21,10 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
-                  CanUserReorderColumns="False">
-            <DataGrid.Columns>
+                  CanUserReorderColumns="False"
+                  Background="#37282D"
+                   GridLinesVisibility="None">
+            <DataGrid.Columns >
                 <DataGridTextColumn Header="OM Azonosító" Binding="{Binding Path=OM_Azonosito}"/>
                 <DataGridTextColumn Header="Név" Binding="{Binding Path=Neve}"/>
                 <DataGridTextColumn Header="Értesítési Cím" Binding="{Binding Path=ErtesitesiCime}"/>
