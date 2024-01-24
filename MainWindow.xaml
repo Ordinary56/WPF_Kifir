@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:WPF_Kifir"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        Background="#37282D"
-        >
+              >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3.3*"/>
@@ -22,8 +21,7 @@
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   CanUserReorderColumns="False"
-                  Background="#37282D"
-                   GridLinesVisibility="None">
+                  >
             <DataGrid.Columns >
                 <DataGridTextColumn Header="OM Azonosító" Binding="{Binding Path=OM_Azonosito}"/>
                 <DataGridTextColumn Header="Név" Binding="{Binding Path=Neve}"/>
