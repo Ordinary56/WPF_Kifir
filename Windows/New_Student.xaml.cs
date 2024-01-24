@@ -55,8 +55,15 @@ namespace WPF_Kifir.Windows
 
             this.Close();
         }
-        void btn_Cancel_Click(object sender, RoutedEventArgs e) => this.Close();
-
+        void Quit(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult res = MessageBox.Show("Biztos, hogy ki szeretnél lépni?","Quit",MessageBoxButton.YesNo,MessageBoxImage.Question);
+            if(res == MessageBoxResult.No)
+            {
+                return;
+            }
+            this.Close();
+        } 
         void TextChanged(object? sender, TextChangedEventArgs e)
         {
             TextBox tb = (sender as TextBox)!;

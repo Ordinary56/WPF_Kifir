@@ -41,6 +41,8 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="TextAlignment" Value="Center"/>
         <Setter Property="Visibility" Value="Collapsed"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="IndianRed"/>
     </Style>
 
 </ResourceDictionary>
