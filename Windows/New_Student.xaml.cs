@@ -34,7 +34,7 @@ namespace WPF_Kifir.Windows
         {
             _store = store;
             //lehet 0 is, de így sokkal olvashatóbb
-            _flags = 0b00000;
+            _flags = 0b0_0_0_0_0_0;
             InitializeComponent();
             store.OnStudentCreated += HandleStudent;
         }
@@ -49,12 +49,14 @@ namespace WPF_Kifir.Windows
             dp_DOB.Text = student.SzuletesiDatum.ToString();
             txt_Email.Text = student.Email;
             txt_Maths.Text = student.Matematika.ToString();
-            txt_Hungarian.Text = student.Magyar.ToString(); 
+            txt_Hungarian.Text = student.Magyar.ToString();
+            Add.Content = "Diák Módosítása";
+            this.Title = "Diák módosítása";
         }
 
         void btn_Add_Click(object sender, RoutedEventArgs e)
         {
-            if (!(_flags == 0b11111))
+            if (!(_flags == 0b1_1_1_1_1_1))
             {
                 MessageBox.Show("Valamelyik megadott mező helytelen", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -93,29 +95,31 @@ namespace WPF_Kifir.Windows
                 // _flags & ~(1 << x) -> És művelettel azt az 1 bitet 0-ra állítjuk
                 case 'O':
                     _regex = OM_Regex();
-                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | 1) : (_flags & ~1));
+                    ChangeBit(_regex.IsMatch(tb.Text),0);
                     DisplayErrorMessage(tb.Name.Split('_')[1],0);
                     break;
                 case 'N':
+                    ChangeBit(!string.IsNullOrEmpty(tb.Text), 1);
+                    DisplayErrorMessage(tb.Name.Split('_')[1], 1);
                     break;
                 case 'A':
-                    _flags = (byte)(tb.Text.Length > 0 ? (_flags | (1 << 1)) : (_flags &~ (1 << 1)));
-                    DisplayErrorMessage(tb.Name.Split('_')[1],1);
+                    ChangeBit(!string.IsNullOrEmpty(tb.Text), 2);
+                    DisplayErrorMessage(tb.Name.Split('_')[1],2);
                     break;
                 case 'E':
                     _regex = Email();
-                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 2)) : (_flags & ~(1 << 3)));
-                    DisplayErrorMessage(tb.Name.Split('_')[1],2);
+                    ChangeBit(_regex.IsMatch(tb.Text), 3);
+                    DisplayErrorMessage(tb.Name.Split('_')[1],3);
                     break;
                 case 'M':
                     _regex = Points();
-                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 3)) : _flags & ~(1 << 4));
-                    DisplayErrorMessage(tb.Name.Split('_')[1],3);
+                    ChangeBit(_regex.IsMatch(tb.Text), 4);
+                    DisplayErrorMessage(tb.Name.Split('_')[1],4);
                     break;
                 case 'H':
                     _regex = Points();
-                    _flags = (byte)(_regex.IsMatch(tb.Text) ? (_flags | (1 << 4)) : _flags & ~(1 << 4));
-                    DisplayErrorMessage(tb.Name.Split('_')[1],4);
+                    ChangeBit(_regex.IsMatch(tb.Text), 5);
+                    DisplayErrorMessage(tb.Name.Split('_')[1],5);
                     break;
                 default:
                     break;
@@ -127,6 +131,10 @@ namespace WPF_Kifir.Windows
             if (TargetBlock == null) return;
             TargetBlock.Visibility = (byte)((_flags >> nth_bit) & 1) == 1 ? Visibility.Collapsed : Visibility.Visible;
 
+        }
+        void ChangeBit(bool predicate, byte nth_bit)
+        {
+            _flags =  (byte)(predicate ? _flags | (1 << nth_bit) : _flags &~ (1 << nth_bit));
         }
         #region Regex
         [GeneratedRegex(@"[A-Z]\w+\s[A-Z]\w+")]

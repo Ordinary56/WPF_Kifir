@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPF_Kifir.Windows"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="New_Student" Height="480" Width="900" >
+        Title="Új diák létrehozása" Height="480" Width="900" >
     <Grid Grid.IsSharedSizeScope="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition  />
@@ -41,7 +41,7 @@
             <Label Content="Magyar:" Grid.Row="6" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             <!--#endregion-->
             <TextBox x:Name="txt_OMid" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TextChanged="TextChanged"/>
-            <TextBox x:Name="txt_Name" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" />
+            <TextBox x:Name="txt_Name" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" TextChanged="TextChanged" />
             <TextBox x:Name="txt_Address" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextChanged="TextChanged"/>
             <DatePicker Text="2000.01.01" x:Name="dp_DOB" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Height="20"/>
             <TextBox x:Name="txt_Email" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextChanged="TextChanged"/>
@@ -71,8 +71,8 @@
                        />
         </Grid>
         <StackPanel Grid.Row="1" Grid.Column="1" Width="250">
-            <Button Content="Új diák felvétele" Click="btn_Add_Click" Margin="15 5"/>
-            <Button Content="Mégse" Click="Quit" Margin="15 0"/>
+            <Button x:Name="Add" Content="Új diák felvétele" Click="btn_Add_Click" Margin="15 5"/>
+            <Button x:Name="Cancel" Content="Mégse" Click="Quit" Margin="15 0"/>
         </StackPanel>
     </Grid>
 </Window>

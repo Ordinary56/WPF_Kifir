@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -45,7 +46,8 @@ namespace WPF_Kifir
             if (student is null) return;
             if(_students.Any(x => x.OM_Azonosito == student.OM_Azonosito))
             {
-                _students[_students.IndexOf(student)] = student;
+                Student old = (_students.First(x => x.OM_Azonosito == student.OM_Azonosito) as Student)!;
+                _students[_students.IndexOf(old!)] = student;
                 return;
             }
             _students.Add(student);
@@ -157,7 +159,7 @@ namespace WPF_Kifir
                     using (FileStream stream = File.OpenRead(ofd.FileName))
                     {
                         Student[]? json_data = await JsonSerializer.DeserializeAsync<Student[]>(stream);
-                        foreach (Student student in json_data)
+                        foreach (Student student in json_data ?? Enumerable.Empty<Student>())
                         {
                             if (_students.Any(x => x.OM_Azonosito == student.OM_Azonosito) || student is null) continue;
                             _students.Add(student);
@@ -170,7 +172,7 @@ namespace WPF_Kifir
                         reader.ReadLine()!.Skip(1);
                         while (!reader.EndOfStream)
                         {
-                            string? line = await reader!.ReadLineAsync();
+                            string line = await reader!.ReadLineAsync() ?? "";
                             if (_students.Any(x => x.OM_Azonosito == line!.Split(';')[0])) continue;
                             _students.Add(new Student(line!));
                         }
