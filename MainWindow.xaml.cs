@@ -45,8 +45,7 @@ namespace WPF_Kifir
             if (student is null) return;
             if(_students.Any(x => x.OM_Azonosito == student.OM_Azonosito))
             {
-                Student old_student = _students.First(x => x.OM_Azonosito == student.OM_Azonosito) as Student;
-                old_student = student;
+                _students[_students.IndexOf(student)] = student;
                 return;
             }
             _students.Add(student);

@@ -71,8 +71,8 @@
                        />
         </Grid>
         <StackPanel Grid.Row="1" Grid.Column="1" Width="250">
-            <Button Content="Új diák felvétele" Click="btn_Add_Click" Margin="10 10"/>
-            <Button Content="Mégse" Click="Quit" Margin="10 0"/>
+            <Button Content="Új diák felvétele" Click="btn_Add_Click" Margin="15 5"/>
+            <Button Content="Mégse" Click="Quit" Margin="15 0"/>
         </StackPanel>
     </Grid>
 </Window>
