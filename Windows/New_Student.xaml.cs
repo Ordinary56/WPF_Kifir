@@ -13,7 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Xps.Packaging;
+using WPF_Kifir.Interfaces;
 using WPF_Kifir.Model;
+using WPF_Kifir.Repositories;
 using WPF_Kifir.Store;
 
 namespace WPF_Kifir.Windows
@@ -25,17 +27,19 @@ namespace WPF_Kifir.Windows
     {
         readonly StudentStore _store;
         Regex? _regex;
+        IRepository _repo;
         // Az összes mező helyességét bitekbek tároljuk el
         // Ha az összes bit 1, akkor mindengyik helyes
         // Ha nem, akkor a diák felvétel nem fog működni
         // BitWise műveletekkel több teljesítményt érhetünk el
         byte _flags;
-        public New_Student(StudentStore store)
+        public New_Student(StudentStore store, KifirRepository repo)
         {
             _store = store;
             //lehet 0 is, de így sokkal olvashatóbb
             _flags = 0b0_0_0_0_0_0;
             InitializeComponent();
+            _repo = repo;
             store.OnStudentCreated += HandleStudent;
         }
 
@@ -61,15 +65,15 @@ namespace WPF_Kifir.Windows
                 MessageBox.Show("Valamelyik megadott mező helytelen", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            _store.GetStudent(new Student(
-                txt_OMid.Text,
+            Student newStudent = new(txt_OMid.Text,
                 txt_Name.Text,
                 txt_Address.Text,
                 DateTime.Parse(dp_DOB.Text),
                 txt_Email.Text,
                 int.Parse(txt_Maths.Text),
-                int.Parse(txt_Hungarian.Text)));
-
+                int.Parse(txt_Hungarian.Text));
+            Task.Run(async () => await _repo.Add(newStudent));
+            _store.GetStudent(newStudent);
             this.Close();
         }
         void Quit(object sender, RoutedEventArgs e)

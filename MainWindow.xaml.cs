@@ -35,10 +35,25 @@ namespace WPF_Kifir
             _studentStore.OnStudentCreated += HandleStudent;
             dg_Students.ItemsSource = _students;
             _repo = repo;
-            // TODO: adatbázisból való betöltés (később)
-            // Tipp:
-            // Loaded += LoadFromDatabase
-            // async Task LoadFromDataBase()
+            Loaded += async (sender, e) => await LoadFromDatabase();
+        }
+
+        private async Task LoadFromDatabase()
+        {
+            
+                try
+                {
+                    var result = await _repo.GetStudentsAsync();
+                    foreach (IFelvetelizo student in result)
+                    {
+                        _students.Add(student);
+                    }
+                }
+                catch(Exception e)
+                {
+                    throw;
+                }
+
         }
 
         private void HandleStudent(Student? student)
@@ -53,6 +68,7 @@ namespace WPF_Kifir
             _students.Add(student);
         }
 
+       
 
         async void Button_Event(object sender, RoutedEventArgs e)
         {
@@ -62,17 +78,18 @@ namespace WPF_Kifir
             switch (btn.Name[^1])
             {
                 case '1':
-                    _newStudent = new(_studentStore);
+                    _newStudent = new(_studentStore,_repo);
                     _newStudent.ShowDialog();
                     break;
                 case '2':
                     if (dg_Students.SelectedIndex == -1) return;
-                    _newStudent = new(_studentStore);
+                    _newStudent = new(_studentStore,_repo);
                     _studentStore.GetStudent(_students[dg_Students.SelectedIndex] as Student);
                     _newStudent.ShowDialog();
                     break;
                 case '3':
                     if (dg_Students.SelectedIndex == -1) return;
+                    await _repo.Delete((Student)_students[dg_Students.SelectedIndex]);
                     _students.RemoveAt(dg_Students.SelectedIndex);
                     break;
                 case '4':
