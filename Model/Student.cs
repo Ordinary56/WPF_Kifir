@@ -24,7 +24,7 @@ namespace WPF_Kifir.Model
             Magyar = magyar;
         }
 
-        public string OM_Azonosito { get;  set; }
+        public string OM_Azonosito { get; set; }
         public string Neve { get;  set; } 
         public string ErtesitesiCime { get; set; }
         public string Email { get; set; }

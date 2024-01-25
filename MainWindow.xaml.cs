@@ -2,24 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 using WPF_Kifir.Interfaces;
 using WPF_Kifir.Model;
 using WPF_Kifir.Repositories;
@@ -52,7 +42,13 @@ namespace WPF_Kifir
 
         private void HandleStudent(Student? student)
         {
-            if (student is null || _students.Any(x => x.OM_Azonosito == student.OM_Azonosito)) return;
+            if (student is null) return;
+            if(_students.Any(x => x.OM_Azonosito == student.OM_Azonosito))
+            {
+                Student old_student = _students.First(x => x.OM_Azonosito == student.OM_Azonosito) as Student;
+                old_student = student;
+                return;
+            }
             _students.Add(student);
         }
 
@@ -70,12 +66,18 @@ namespace WPF_Kifir
                     break;
                 case '2':
                     if (dg_Students.SelectedIndex == -1) return;
-                    _students.RemoveAt(dg_Students.SelectedIndex);
+                    _newStudent = new(_studentStore);
+                    _studentStore.GetStudent(_students[dg_Students.SelectedIndex] as Student);
+                    _newStudent.ShowDialog();
                     break;
                 case '3':
-                    await Import();
+                    if (dg_Students.SelectedIndex == -1) return;
+                    _students.RemoveAt(dg_Students.SelectedIndex);
                     break;
                 case '4':
+                    await Import();
+                    break;
+                case '5':
                     await Export();
                     break;
                 default:

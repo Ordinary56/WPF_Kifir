@@ -36,7 +36,22 @@ namespace WPF_Kifir.Windows
             //lehet 0 is, de így sokkal olvashatóbb
             _flags = 0b00000;
             InitializeComponent();
+            store.OnStudentCreated += HandleStudent;
         }
+
+        private void HandleStudent(Student? student)
+        {
+            if(student == null) return;
+            txt_OMid.Text = student.OM_Azonosito.ToString();
+            txt_OMid.IsEnabled = false;
+            txt_Name.Text = student.Neve;
+            txt_Address.Text = student.ErtesitesiCime;
+            dp_DOB.Text = student.SzuletesiDatum.ToString();
+            txt_Email.Text = student.Email;
+            txt_Maths.Text = student.Matematika.ToString();
+            txt_Hungarian.Text = student.Magyar.ToString(); 
+        }
+
         void btn_Add_Click(object sender, RoutedEventArgs e)
         {
             if (!(_flags == 0b11111))
@@ -107,7 +122,7 @@ namespace WPF_Kifir.Windows
             }
         }
         void DisplayErrorMessage(string labelname, byte nth_bit)
-        {
+       {
             TextBlock? TargetBlock = FindName($"tbl_{labelname}") as TextBlock;
             if (TargetBlock == null) return;
             TargetBlock.Visibility = (byte)((_flags >> nth_bit) & 1) == 1 ? Visibility.Collapsed : Visibility.Visible;
