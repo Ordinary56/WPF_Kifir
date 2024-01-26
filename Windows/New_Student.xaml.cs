@@ -25,7 +25,7 @@ namespace WPF_Kifir.Windows
     /// </summary>
     public partial class New_Student : Window
     {
-        readonly StudentStore _store;
+        readonly Mediator _store;
         Regex? _regex;
         IRepository _repo;
         // Az összes mező helyességét bitekbek tároljuk el
@@ -33,14 +33,20 @@ namespace WPF_Kifir.Windows
         // Ha nem, akkor a diák felvétel nem fog működni
         // BitWise műveletekkel több teljesítményt érhetünk el
         byte _flags;
-        public New_Student(StudentStore store, KifirRepository repo)
+        public New_Student(Mediator store, KifirRepository repo)
         {
             _store = store;
             //lehet 0 is, de így sokkal olvashatóbb
             _flags = 0b0_0_0_0_0_0;
             InitializeComponent();
             _repo = repo;
-            store.OnStudentCreated += HandleStudent;
+            store.ObjectSent += (sender, obj) => 
+            {
+                if(sender != this)
+                {
+                    HandleStudent(obj as Student);
+                }
+            };
         }
 
         private void HandleStudent(Student? student)
@@ -65,16 +71,24 @@ namespace WPF_Kifir.Windows
                 MessageBox.Show("Valamelyik megadott mező helytelen", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            Student newStudent = new(txt_OMid.Text,
-                txt_Name.Text,
-                txt_Address.Text,
-                DateTime.Parse(dp_DOB.Text),
-                txt_Email.Text,
-                int.Parse(txt_Maths.Text),
-                int.Parse(txt_Hungarian.Text));
-            Task.Run(async () => await _repo.Add(newStudent));
-            _store.GetStudent(newStudent);
-            this.Close();
+            try
+            {
+                Student newStudent = new(txt_OMid.Text,
+                    txt_Name.Text,
+                    txt_Address.Text,
+                    DateTime.Parse(dp_DOB.Text),
+                    txt_Email.Text,
+                    int.Parse(txt_Maths.Text),
+                    int.Parse(txt_Hungarian.Text));
+                _store.SendMessage(this,newStudent);
+                this.Close();
+            }
+            catch(Exception)
+            {
+                MessageBox.Show("Hiba, Ilyen tanuló Ezzel az OM azonosítóval az adatbázisban már létezik!","Error", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
         }
         void Quit(object sender, RoutedEventArgs e)
         {
