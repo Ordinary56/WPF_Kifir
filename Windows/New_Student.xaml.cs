@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Tls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,19 +33,25 @@ namespace WPF_Kifir.Windows
         // Ha nem, akkor a diák felvétel nem fog működni
         // BitWise műveletekkel több teljesítményt érhetünk el
         byte _flags;
+        EventHandler<object> _handler;
         public New_Student(Mediator store)
         {
             _store = store;
             //lehet 0 is, de így sokkal olvashatóbb
             _flags = 0b0_0_0_0_0_0;
             InitializeComponent();
-            store.ObjectSent += (sender, obj) =>
+            _handler = (sender, obj) =>
             {
                 if (sender != this)
                 {
                     HandleStudent(obj as Student);
                 }
             };
+            store.ObjectSent += _handler;
+        }
+        ~New_Student()
+        {
+            _store.ObjectSent -= _handler;
         }
 
         private void HandleStudent(Student? student)
