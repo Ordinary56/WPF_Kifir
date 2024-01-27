@@ -156,7 +156,7 @@ namespace WPF_Kifir.Windows
         #region Regex
         [GeneratedRegex(@"[A-Z]\w+\s[A-Z]\w+")]
         private partial Regex Name_Regex();
-        [GeneratedRegex(@"^7255\d{7}$", RegexOptions.Multiline)]
+        [GeneratedRegex(@"^\d{11}$", RegexOptions.Multiline)]
         private partial Regex OM_Regex();
 
         [GeneratedRegex(@"^(?:[0-9]|[0-4][0-9]|50)$", RegexOptions.Multiline)]

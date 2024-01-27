@@ -63,16 +63,16 @@ namespace WPF_Kifir
             }
         }
 
-       private async Task _students_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+       private void _students_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             // EZ RENDKÍVŰL VESZÉLYES (null check NINCS)
             switch (e.Action)
             {
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
-                    await _repo.Add((Student)e.NewItems[0]!);
+                    Task.Run(() => _repo.Add((Student)e.NewItems[0]!));
                     break;
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
-                    await _repo.Delete((Student)e.OldItems[0]!);
+                    Task.Run(() => _repo.Delete((Student)e.OldItems[0]!));
                     break;
                 /*
                  * EZ MINDEN ADATOT KITÖRÖL AZ ADATBÁZISBÓL
@@ -85,27 +85,34 @@ namespace WPF_Kifir
                     break;
                 */
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
-                    await _repo.Edit((Student)e.NewItems[0]);
+                    Task.Run(() =>_repo.Edit((Student)e.NewItems[0]));
                     break;
             }
         }
 
         private async Task LoadFromDatabase()
         {
-                    _students.CollectionChanged += async(sender, e) => await _students_CollectionChanged(sender,e);
+                    _students.CollectionChanged += _students_CollectionChanged;
                     List<Student>? result = await _repo.GetStudentsAsync();
-                    if (result?.Count < 1) 
+                    if (result?.Count < 1 || result == null) 
                     {
-                         MessageBox.Show("Hiba, nem lehet betölteni az adatokat az adatbázisból!\n A Program nem tud az adatbázissal " +
-                             "kommunikálni.","Error",
-                             MessageBoxButton.OK,MessageBoxImage.Error);    
-                        _students.CollectionChanged -= async(sender, e) => await _students_CollectionChanged(sender,e);
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            MessageBox.Show("Hiba, nem lehet betölteni az adatokat az adatbázisból!\n A Program nem tud az adatbázissal " +
+                                "kommunikálni.", "Error",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+                        });
+                        _students.CollectionChanged -= _students_CollectionChanged;
+                        return;
                     }
                     foreach (Student student in result ?? Enumerable.Empty<Student>())
                     {
-                        _students.Add(student);
+                        Application.Current.Dispatcher.Invoke( () =>
+                        {
+                            _students.Add(student);
+                        });
                     }
-
+                    B_5.IsEnabled = false;
         }
 
         void Quit(object sender, RoutedEventArgs e) => Close();

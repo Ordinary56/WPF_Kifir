@@ -58,6 +58,17 @@ namespace WPF_Kifir.Repositories
         {
             using MySqlConnection connection = GetConnection();
             await connection.OpenAsync();
+            using MySqlCommand command = new("UPDATE felvetelizok SET Neve=@Nev, Ertesitesi_Cim=@Cim, Szul_Datum=@Datum, Email=@Email, " +
+                " Matek=@Matek, Magyar=@Magyar WHERE OM_Azon=@OM_Azon", connection);
+            command.Parameters.AddWithValue("@Nev",student.Neve);
+            command.Parameters.AddWithValue("@Cim",student.ErtesitesiCime);
+            command.Parameters.AddWithValue("@Datum",student.SzuletesiDatum);
+            command.Parameters.AddWithValue("@Email",student.Email);
+            command.Parameters.AddWithValue("@Matek",student.Matematika);
+            command.Parameters.AddWithValue("@Magyar",student.Magyar);
+            command.Parameters.AddWithValue("@OM_Azon",student.OM_Azonosito);
+            await command.PrepareAsync();
+            await command.ExecuteNonQueryAsync();
 
         }
 
