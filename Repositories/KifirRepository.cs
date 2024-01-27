@@ -16,28 +16,42 @@ namespace WPF_Kifir.Repositories
     {
         public async Task Add(Student student)
         {
-            using MySqlConnection connection = GetConnection();
-            await connection.OpenAsync();
-            using MySqlCommand command = new("INSERT INTO felvetelizok VALUES (" +
-                "@OM_Azon,@Nev,@Ertesitesi_Cim,@Szul,@Email,@Matek,@Magyar)",connection);
-            command.Parameters.AddWithValue("@OM_Azon",student.OM_Azonosito);
-            command.Parameters.AddWithValue("@Nev", student.Neve);
-            command.Parameters.AddWithValue("@Ertesitesi_Cim", student.ErtesitesiCime);
-            command.Parameters.AddWithValue("@Szul", student.SzuletesiDatum);
-            command.Parameters.AddWithValue("@Email", student.Email);
-            command.Parameters.AddWithValue("@Matek", student.Matematika);
-            command.Parameters.AddWithValue("@Magyar", student.Magyar);
-            await command.PrepareAsync();
-            await command.ExecuteNonQueryAsync();
+            try
+            {
+                using MySqlConnection connection = GetConnection();
+                await connection.OpenAsync();
+                using MySqlCommand command = new("INSERT INTO felvetelizok VALUES (" +
+                    "@OM_Azon,@Nev,@Ertesitesi_Cim,@Szul,@Email,@Matek,@Magyar)", connection);
+                command.Parameters.AddWithValue("@OM_Azon", student.OM_Azonosito);
+                command.Parameters.AddWithValue("@Nev", student.Neve);
+                command.Parameters.AddWithValue("@Ertesitesi_Cim", student.ErtesitesiCime);
+                command.Parameters.AddWithValue("@Szul", student.SzuletesiDatum);
+                command.Parameters.AddWithValue("@Email", student.Email);
+                command.Parameters.AddWithValue("@Matek", student.Matematika);
+                command.Parameters.AddWithValue("@Magyar", student.Magyar);
+                await command.PrepareAsync();
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception)
+            {
+                return;
+            }
         }
 
         public async Task Delete(Student student)
         {
-            using MySqlConnection connection = GetConnection();
-            await connection.OpenAsync();
-            using MySqlCommand cmd = new($"DELETE FROM felvetelizok WHERE OM_Azon={student.OM_Azonosito}",connection);
-            await cmd.PrepareAsync();
-            await cmd.ExecuteNonQueryAsync();
+            try
+            {
+                using MySqlConnection connection = GetConnection();
+                await connection.OpenAsync();
+                using MySqlCommand cmd = new($"DELETE FROM felvetelizok WHERE OM_Azon={student.OM_Azonosito}", connection);
+                await cmd.PrepareAsync();
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch(Exception)
+            {
+                return;
+            }
         }
 
         public async Task Edit(Student student)

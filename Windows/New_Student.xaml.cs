@@ -27,22 +27,20 @@ namespace WPF_Kifir.Windows
     {
         readonly Mediator _store;
         Regex? _regex;
-        IRepository _repo;
         // Az összes mező helyességét bitekbek tároljuk el
         // Ha az összes bit 1, akkor mindengyik helyes
         // Ha nem, akkor a diák felvétel nem fog működni
         // BitWise műveletekkel több teljesítményt érhetünk el
         byte _flags;
-        public New_Student(Mediator store, KifirRepository repo)
+        public New_Student(Mediator store)
         {
             _store = store;
             //lehet 0 is, de így sokkal olvashatóbb
             _flags = 0b0_0_0_0_0_0;
             InitializeComponent();
-            _repo = repo;
-            store.ObjectSent += (sender, obj) => 
+            store.ObjectSent += (sender, obj) =>
             {
-                if(sender != this)
+                if (sender != this)
                 {
                     HandleStudent(obj as Student);
                 }
@@ -51,7 +49,7 @@ namespace WPF_Kifir.Windows
 
         private void HandleStudent(Student? student)
         {
-            if(student == null) return;
+            if (student == null) return;
             txt_OMid.Text = student.OM_Azonosito.ToString();
             txt_OMid.IsEnabled = false;
             txt_Name.Text = student.Neve;
@@ -80,25 +78,17 @@ namespace WPF_Kifir.Windows
                     txt_Email.Text,
                     int.Parse(txt_Maths.Text),
                     int.Parse(txt_Hungarian.Text));
-                _store.SendMessage(this,newStudent);
+                _store.SendMessage(this, newStudent);
                 this.Close();
             }
-            catch(Exception)
+            catch (Exception)
             {
-                MessageBox.Show("Hiba, Ilyen tanuló Ezzel az OM azonosítóval az adatbázisban már létezik!","Error", 
+                MessageBox.Show("Hiba, Ilyen tanuló Ezzel az OM azonosítóval az adatbázisban már létezik!", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
         }
-        void Quit(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult res = MessageBox.Show("Biztos, hogy ki szeretnél lépni?","Quit",MessageBoxButton.YesNo,MessageBoxImage.Question);
-            if(res == MessageBoxResult.No)
-            {
-                return;
-            }
-            this.Close();
-        } 
+        void Quit(object sender, RoutedEventArgs e) => Close();
         void TextChanged(object? sender, TextChangedEventArgs e)
         {
             TextBox tb = (sender as TextBox)!;
@@ -113,8 +103,8 @@ namespace WPF_Kifir.Windows
                 // _flags & ~(1 << x) -> És művelettel azt az 1 bitet 0-ra állítjuk
                 case 'O':
                     _regex = OM_Regex();
-                    ChangeBit(_regex.IsMatch(tb.Text),0);
-                    DisplayErrorMessage(tb.Name.Split('_')[1],0);
+                    ChangeBit(_regex.IsMatch(tb.Text), 0);
+                    DisplayErrorMessage(tb.Name.Split('_')[1], 0);
                     break;
                 case 'N':
                     ChangeBit(!string.IsNullOrEmpty(tb.Text), 1);
@@ -122,29 +112,31 @@ namespace WPF_Kifir.Windows
                     break;
                 case 'A':
                     ChangeBit(!string.IsNullOrEmpty(tb.Text), 2);
-                    DisplayErrorMessage(tb.Name.Split('_')[1],2);
+                    DisplayErrorMessage(tb.Name.Split('_')[1], 2);
                     break;
                 case 'E':
                     _regex = Email();
                     ChangeBit(_regex.IsMatch(tb.Text), 3);
-                    DisplayErrorMessage(tb.Name.Split('_')[1],3);
+                    DisplayErrorMessage(tb.Name.Split('_')[1], 3);
                     break;
                 case 'M':
                     _regex = Points();
                     ChangeBit(_regex.IsMatch(tb.Text), 4);
-                    DisplayErrorMessage(tb.Name.Split('_')[1],4);
+                    DisplayErrorMessage(tb.Name.Split('_')[1], 4);
                     break;
                 case 'H':
                     _regex = Points();
                     ChangeBit(_regex.IsMatch(tb.Text), 5);
-                    DisplayErrorMessage(tb.Name.Split('_')[1],5);
+                    DisplayErrorMessage(tb.Name.Split('_')[1], 5);
                     break;
                 default:
                     break;
             }
         }
+
+        void Drag(object sender, MouseButtonEventArgs e) => DragMove();
         void DisplayErrorMessage(string labelname, byte nth_bit)
-       {
+        {
             TextBlock? TargetBlock = FindName($"tbl_{labelname}") as TextBlock;
             if (TargetBlock == null) return;
             TargetBlock.Visibility = (byte)((_flags >> nth_bit) & 1) == 1 ? Visibility.Collapsed : Visibility.Visible;
@@ -152,7 +144,7 @@ namespace WPF_Kifir.Windows
         }
         void ChangeBit(bool predicate, byte nth_bit)
         {
-            _flags =  (byte)(predicate ? _flags | (1 << nth_bit) : _flags &~ (1 << nth_bit));
+            _flags = (byte)(predicate ? _flags | (1 << nth_bit) : _flags & ~(1 << nth_bit));
         }
         #region Regex
         [GeneratedRegex(@"[A-Z]\w+\s[A-Z]\w+")]
