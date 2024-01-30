@@ -18,7 +18,7 @@ namespace WPF_Kifir
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            StudentStore store = new();
+            Mediator store = new();
             KifirRepository repository = new();
             var window = new MainWindow(store,repository);
             window.Show();

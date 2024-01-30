@@ -7,12 +7,22 @@ using WPF_Kifir.Model;
 
 namespace WPF_Kifir.Store
 {
-    public class StudentStore
+    public interface IMediator
     {
-        public event Action<Student?>? OnStudentCreated;
-        public void GetStudent(Student? stud)
+        event EventHandler<object> ObjectSent;
+        void SendMessage(object sender, object obj);
+    }
+    public class Mediator : IMediator
+    {
+        public event EventHandler<object>? ObjectSent;
+
+        public void SendMessage(object sender, object obj)
         {
-            OnStudentCreated?.Invoke(stud);
+                OnObjectSent(sender, obj);
+        }
+        protected virtual void OnObjectSent(object sender, object obj)
+        {
+            ObjectSent?.Invoke(sender,obj);
         }
     }
 }

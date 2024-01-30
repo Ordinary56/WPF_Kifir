@@ -22,7 +22,7 @@ namespace WPF_Kifir.Repositories
             string[] values = new string[columncount];
             for(int i = 0; i < columncount; i++)
             {
-                values[i] = reader.GetValue(i).ToString();
+                values[i] = reader.GetValue(i).ToString()!;
             }
             return values;
         }

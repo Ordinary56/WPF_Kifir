@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Tls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,27 +26,37 @@ namespace WPF_Kifir.Windows
     /// </summary>
     public partial class New_Student : Window
     {
-        readonly StudentStore _store;
+        readonly Mediator _store;
         Regex? _regex;
-        IRepository _repo;
         // Az összes mező helyességét bitekbek tároljuk el
         // Ha az összes bit 1, akkor mindengyik helyes
         // Ha nem, akkor a diák felvétel nem fog működni
         // BitWise műveletekkel több teljesítményt érhetünk el
         byte _flags;
-        public New_Student(StudentStore store, KifirRepository repo)
+        EventHandler<object> _handler;
+        public New_Student(Mediator store)
         {
             _store = store;
             //lehet 0 is, de így sokkal olvashatóbb
             _flags = 0b0_0_0_0_0_0;
             InitializeComponent();
-            _repo = repo;
-            store.OnStudentCreated += HandleStudent;
+            _handler = (sender, obj) =>
+            {
+                if (sender != this)
+                {
+                    HandleStudent(obj as Student);
+                }
+            };
+            store.ObjectSent += _handler;
+        }
+        ~New_Student()
+        {
+            _store.ObjectSent -= _handler;
         }
 
         private void HandleStudent(Student? student)
         {
-            if(student == null) return;
+            if (student == null) return;
             txt_OMid.Text = student.OM_Azonosito.ToString();
             txt_OMid.IsEnabled = false;
             txt_Name.Text = student.Neve;
@@ -65,26 +76,26 @@ namespace WPF_Kifir.Windows
                 MessageBox.Show("Valamelyik megadott mező helytelen", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            Student newStudent = new(txt_OMid.Text,
-                txt_Name.Text,
-                txt_Address.Text,
-                DateTime.Parse(dp_DOB.Text),
-                txt_Email.Text,
-                int.Parse(txt_Maths.Text),
-                int.Parse(txt_Hungarian.Text));
-            Task.Run(async () => await _repo.Add(newStudent));
-            _store.GetStudent(newStudent);
-            this.Close();
-        }
-        void Quit(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult res = MessageBox.Show("Biztos, hogy ki szeretnél lépni?","Quit",MessageBoxButton.YesNo,MessageBoxImage.Question);
-            if(res == MessageBoxResult.No)
+            try
             {
+                Student newStudent = new(txt_OMid.Text,
+                    txt_Name.Text,
+                    txt_Address.Text,
+                    DateTime.Parse(dp_DOB.Text),
+                    txt_Email.Text,
+                    int.Parse(txt_Maths.Text),
+                    int.Parse(txt_Hungarian.Text));
+                _store.SendMessage(this, newStudent);
+                this.Close();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Hiba, Ilyen tanuló Ezzel az OM azonosítóval az adatbázisban már létezik!", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            this.Close();
-        } 
+        }
+        void Quit(object sender, RoutedEventArgs e) => Close();
         void TextChanged(object? sender, TextChangedEventArgs e)
         {
             TextBox tb = (sender as TextBox)!;
@@ -99,8 +110,8 @@ namespace WPF_Kifir.Windows
                 // _flags & ~(1 << x) -> És művelettel azt az 1 bitet 0-ra állítjuk
                 case 'O':
                     _regex = OM_Regex();
-                    ChangeBit(_regex.IsMatch(tb.Text),0);
-                    DisplayErrorMessage(tb.Name.Split('_')[1],0);
+                    ChangeBit(_regex.IsMatch(tb.Text), 0);
+                    DisplayErrorMessage(tb.Name.Split('_')[1], 0);
                     break;
                 case 'N':
                     ChangeBit(!string.IsNullOrEmpty(tb.Text), 1);
@@ -108,29 +119,31 @@ namespace WPF_Kifir.Windows
                     break;
                 case 'A':
                     ChangeBit(!string.IsNullOrEmpty(tb.Text), 2);
-                    DisplayErrorMessage(tb.Name.Split('_')[1],2);
+                    DisplayErrorMessage(tb.Name.Split('_')[1], 2);
                     break;
                 case 'E':
                     _regex = Email();
                     ChangeBit(_regex.IsMatch(tb.Text), 3);
-                    DisplayErrorMessage(tb.Name.Split('_')[1],3);
+                    DisplayErrorMessage(tb.Name.Split('_')[1], 3);
                     break;
                 case 'M':
                     _regex = Points();
                     ChangeBit(_regex.IsMatch(tb.Text), 4);
-                    DisplayErrorMessage(tb.Name.Split('_')[1],4);
+                    DisplayErrorMessage(tb.Name.Split('_')[1], 4);
                     break;
                 case 'H':
                     _regex = Points();
                     ChangeBit(_regex.IsMatch(tb.Text), 5);
-                    DisplayErrorMessage(tb.Name.Split('_')[1],5);
+                    DisplayErrorMessage(tb.Name.Split('_')[1], 5);
                     break;
                 default:
                     break;
             }
         }
+
+        void Drag(object sender, MouseButtonEventArgs e) => DragMove();
         void DisplayErrorMessage(string labelname, byte nth_bit)
-       {
+        {
             TextBlock? TargetBlock = FindName($"tbl_{labelname}") as TextBlock;
             if (TargetBlock == null) return;
             TargetBlock.Visibility = (byte)((_flags >> nth_bit) & 1) == 1 ? Visibility.Collapsed : Visibility.Visible;
@@ -138,12 +151,12 @@ namespace WPF_Kifir.Windows
         }
         void ChangeBit(bool predicate, byte nth_bit)
         {
-            _flags =  (byte)(predicate ? _flags | (1 << nth_bit) : _flags &~ (1 << nth_bit));
+            _flags = (byte)(predicate ? _flags | (1 << nth_bit) : _flags & ~(1 << nth_bit));
         }
         #region Regex
         [GeneratedRegex(@"[A-Z]\w+\s[A-Z]\w+")]
         private partial Regex Name_Regex();
-        [GeneratedRegex(@"^7255\d{7}$", RegexOptions.Multiline)]
+        [GeneratedRegex(@"^\d{11}$", RegexOptions.Multiline)]
         private partial Regex OM_Regex();
 
         [GeneratedRegex(@"^(?:[0-9]|[0-4][0-9]|50)$", RegexOptions.Multiline)]

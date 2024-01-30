@@ -10,7 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Input;
 using WPF_Kifir.Interfaces;
 using WPF_Kifir.Model;
 using WPF_Kifir.Repositories;
@@ -24,51 +24,98 @@ namespace WPF_Kifir
     public partial class MainWindow : Window
     {
         readonly ObservableCollection<IFelvetelizo> _students;
-        readonly StudentStore _studentStore;
+        readonly Mediator _studentStore;
         readonly KifirRepository _repo;
         New_Student? _newStudent;
-        public MainWindow(StudentStore store, KifirRepository repo)
+        public MainWindow(Mediator store, KifirRepository repo)
         {
             InitializeComponent();
             _students = new();
             _studentStore = store;
-            _studentStore.OnStudentCreated += HandleStudent;
+            _studentStore.ObjectSent += (sender, obj) => 
+            {
+                if(sender != this)
+                {
+                    ReceiveObj(obj);
+                }
+            };
             dg_Students.ItemsSource = _students;
             _repo = repo;
-            Loaded += async (sender, e) => await LoadFromDatabase();
+        }
+
+        private void ReceiveObj(object obj)
+        {
+            if(obj is Student ) 
+            {
+                Student student = (Student)obj!;
+                if (_students.Any(x => x.OM_Azonosito == student!.OM_Azonosito))
+                {
+                    IFelvetelizo old = _students.First(x => x.OM_Azonosito == student!.OM_Azonosito);
+                    _students[_students.IndexOf(old)] = student;
+                    return;
+                } 
+                _students.Add(student!);
+
+            }
+            else
+            {
+                return;
+            }
+        }
+
+       private void _students_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            // EZ RENDKÍVŰL VESZÉLYES (null check NINCS)
+            switch (e.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                    Task.Run(() => _repo.Add((Student)e.NewItems[0]!));
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                    Task.Run(() => _repo.Delete((Student)e.OldItems[0]!));
+                    break;
+                /*
+                 * EZ MINDEN ADATOT KITÖRÖL AZ ADATBÁZISBÓL
+                 * VIGYÁZNI KELL VELE
+                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                    foreach (Student student in e.OldItems ) 
+                    {
+                        _repo.Delete(student);
+                    };
+                    break;
+                */
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                    Task.Run(() =>_repo.Edit((Student)e.NewItems[0]));
+                    break;
+            }
         }
 
         private async Task LoadFromDatabase()
         {
-            
-                try
-                {
-                    var result = await _repo.GetStudentsAsync();
-                    foreach (IFelvetelizo student in result)
+                    _students.CollectionChanged += _students_CollectionChanged;
+                    List<Student>? result = await _repo.GetStudentsAsync();
+                    if (result?.Count < 1 || result == null) 
                     {
-                        _students.Add(student);
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            MessageBox.Show("Hiba, nem lehet betölteni az adatokat az adatbázisból!\n A Program nem tud az adatbázissal " +
+                                "kommunikálni.", "Error",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+                        });
+                        _students.CollectionChanged -= _students_CollectionChanged;
+                        return;
                     }
-                }
-                catch(Exception e)
-                {
-                    throw;
-                }
-
+                    foreach (Student student in result ?? Enumerable.Empty<Student>())
+                    {
+                        Application.Current.Dispatcher.Invoke( () =>
+                        {
+                            _students.Add(student);
+                        });
+                    }
+                    B_5.IsEnabled = false;
         }
 
-        private void HandleStudent(Student? student)
-        {
-            if (student is null) return;
-            if(_students.Any(x => x.OM_Azonosito == student.OM_Azonosito))
-            {
-                Student old = (_students.First(x => x.OM_Azonosito == student.OM_Azonosito) as Student)!;
-                _students[_students.IndexOf(old!)] = student;
-                return;
-            }
-            _students.Add(student);
-        }
-
-       
+        void Quit(object sender, RoutedEventArgs e) => Close();
 
         async void Button_Event(object sender, RoutedEventArgs e)
         {
@@ -78,24 +125,26 @@ namespace WPF_Kifir
             switch (btn.Name[^1])
             {
                 case '1':
-                    _newStudent = new(_studentStore,_repo);
+                    _newStudent = new(_studentStore);
                     _newStudent.ShowDialog();
                     break;
                 case '2':
                     if (dg_Students.SelectedIndex == -1) return;
-                    _newStudent = new(_studentStore,_repo);
-                    _studentStore.GetStudent(_students[dg_Students.SelectedIndex] as Student);
+                    _newStudent = new(_studentStore);
+                    _studentStore.SendMessage(this,(_students[dg_Students.SelectedIndex] as Student)!);
                     _newStudent.ShowDialog();
                     break;
                 case '3':
                     if (dg_Students.SelectedIndex == -1) return;
-                    await _repo.Delete((Student)_students[dg_Students.SelectedIndex]);
                     _students.RemoveAt(dg_Students.SelectedIndex);
                     break;
                 case '4':
                     await Import();
                     break;
                 case '5':
+                    await LoadFromDatabase();
+                    break;
+                case '6':
                     await Export();
                     break;
                 default:
@@ -115,6 +164,7 @@ namespace WPF_Kifir
                 B_3.IsEnabled = false;
                 await SaveAs(sfd);
             }
+            MessageBox.Show("Fájl sikeresen exportálva", "Success", MessageBoxButton.OK, MessageBoxImage.Asterisk);
             B_3.IsEnabled = true;
         }
 
@@ -150,7 +200,7 @@ namespace WPF_Kifir
 
         async Task Import()
         {
-
+          
             OpenFileDialog ofd = new()
             {
                 Filter = "Comma Seperated Value (.csv) | *.csv | JavaScript Object Notation (JSON) | *.json"
@@ -161,6 +211,9 @@ namespace WPF_Kifir
                 MessageBoxResult result = MessageBox.Show("Felülírjuk?", "Choice", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes && _students.Count < 1)
                 {
+                    // Most Akkor az adatbázist is yeeteljük úgy ahogy van vagy maradjon?
+                    // Ha marad, akkor azt így szeparálni gatya lesz
+                    // Egyelőre ez a kód nem működik ha sikeresen csatlakozott az adatbázishoz
                     _students.Clear();
                 }
                 await OpenAs(ofd);
@@ -178,7 +231,7 @@ namespace WPF_Kifir
                         Student[]? json_data = await JsonSerializer.DeserializeAsync<Student[]>(stream);
                         foreach (Student student in json_data ?? Enumerable.Empty<Student>())
                         {
-                            if (_students.Any(x => x.OM_Azonosito == student.OM_Azonosito) || student is null) continue;
+                            if (_students.Any(x => x.OM_Azonosito == student.OM_Azonosito)) continue;
                             _students.Add(student);
                         }
                     }
@@ -197,5 +250,6 @@ namespace WPF_Kifir
                     break;
             }
         }
+        void Drag(object sender, MouseButtonEventArgs e) => DragMove();
     }
 }
