@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OM finder</title>
+    <link rel="stylesheet" href="./style.css" media="all">
+    <script defer src="./script.js" type="module"></script>
+</head>
+
+<body>
+    <div class="finder">
+        <label for="OM_Input">Írd be egy tanuló OM azonosítóját: </label>
+        <input type="number" name="OM_ID" id="OM_Input">
+        <button id="B_OM">Keress!</button>
+        <br>
+        <span id="Error_Span"></span>
+    </div>
+    <div class="result">
+         <table id="Result_Table">
+            <thead>
+                <tr></tr>
+            </thead>
+            <tbody></tbody>
+         </table>
+    </div>
+</body>
+
+</html>
