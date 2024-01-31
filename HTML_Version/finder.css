@@ -1,10 +1,5 @@
-* {
-    min-width: 0;
-    box-sizing: border-box;
-    margin: 0;
-}
 
-body {
+#finder {
     display: grid;
     width: 100vw;
     height: 100vh;
@@ -20,7 +15,7 @@ span {
     color: red;
     font-weight: bolder;
 }
-.finder {
+.input_wrapper {
 
     margin: 15px auto auto auto;
     gap: 5px;

@@ -5,26 +5,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OM finder</title>
-    <link rel="stylesheet" href="./style.css" media="all">
-    <script defer src="./script.js" type="module"></script>
+    <link rel="stylesheet" href="./finder.css" media="all">
+    <link rel="stylesheet" href="./filter.css" media="all">
+    <link rel="stylesheet" href="./main.css" media="all">
+    <script defer src="./main.js" type="module"></script>
+    <script defer src="./finder.js" type="module"></script>
+    <script defer src="./filter.js" type="module"></script>
 </head>
 
 <body>
-    <div class="finder">
-        <label for="OM_Input">Írd be egy tanuló OM azonosítóját: </label>
-        <input type="number" name="OM_ID" id="OM_Input">
-        <button id="B_OM">Keress!</button>
+    <nav>
+        <button id="main_menu">Főmenü</button>
+        <button id="find_menu">Keresés</button>
+    </nav>
+    <section id="filter">
+        <!-- táblázat megjelenítése -->
+        <div class="Listaz">
+            <label for="OsszesPontszamInput">Pontszám összes:</label>
+            <input type="number" name="OsszesPontszamInput" id="OsszesPontszamInput">
+            <button onclick="ListazClick()">Listáz</button>
+        </div>
         <br>
-        <span id="Error_Span"></span>
-    </div>
-    <div class="result">
-         <table id="Result_Table">
-            <thead>
-                <tr></tr>
-            </thead>
-            <tbody></tbody>
-         </table>
-    </div>
+
+        <div id="table">
+        </div>
+    </section>
+    <!--#region finder-->
+    <section id="finder" style="visibility: hidden;">
+        <!-- Tanuló szűrése OM Azonosítójára -->
+        <div class="input_wrapper">
+            <label for="OM_Input">Írja be egy tanuló OM azonosítóját: </label>
+            <input type="number" name="OM_ID" id="OM_Input">
+            <button id="B_OM">Keress!</button>
+            <br>
+            <span id="Error_Span"></span>
+        </div>
+        <div class="result">
+            <table id="Result_Table">
+                <thead>
+                    <tr></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+    <!-- #endregion -->
 </body>
 
 </html>

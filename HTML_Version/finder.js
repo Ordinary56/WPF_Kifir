@@ -1,21 +1,11 @@
 "use strict";
 //@ts-check
 
-/**
- * @typedef  {Object} Student
- * @property {string} OM_ID
- * @property {string} Name
- * @property {string} Address
- * @property {string} Date
- * @property {string} Email
- * @property {number} Math
- * @property {number} Hungarian
- */
 
-/** @type {Student[]} */
-import data from "./test.json" assert {type: "json"};
+/**@typedef {import("./main").Student} Student */
 
-// data.forEach(student => console.log(student));
+/**@type {Student[]} */
+import { data } from "/main.js";
 
 /** @type {RegExp} */
 const OM_Regex = /\d{11}/g;
