@@ -52,7 +52,7 @@ const DisplayStudent = (student) => {
  */
 const FindStudent = (input) => {
     /**
-     * @type {Student}
+     * @type {Student|undefined}
      */
     let student;
     student = data.find(x => x.OM_Azonosito == input);
@@ -68,3 +68,4 @@ document.getElementById("OM_Input").addEventListener("input", e => {
     document.getElementById("Error_Span").innerText = OM_Regex.test(e.target.value) ? "" : "Az OM Azonosítónak 11 számjegyből kell állnia és " +
         "nem tartalmazhat betűt";
 });
+
