@@ -1,0 +1,23 @@
+* {
+    /* Egy kis trükk ;) */
+    min-width: 0;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+nav {
+    display: inline block;
+    text-align: center;
+    margin-bottom: 2%;
+}
+
+button {
+    border: none;
+    border-radius: 15px;
+    padding: .8rem;
+    width: 150px;
+    &:hover {
+        cursor: pointer;
+        background-color: #545434;
+    }
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OM finder</title>
+    <link rel="stylesheet" href="./finder.css" media="all">
+    <link rel="stylesheet" href="./filter.css" media="all">
+    <link rel="stylesheet" href="./main.css" media="all">
+    <script defer src="./main.js" type="module"></script>
+    <script defer src="./finder.js" type="module"></script>
+    <script defer src="./filter.js" type="module"></script>
+</head>
+
+<body>
+    <nav>
+        <button id="main_menu">Főmenü</button>
+        <button id="find_menu">Keresés</button>
+    </nav>
+    <section id="filter">
+        <!-- táblázat megjelenítése -->
+        <div class="Listaz">
+            <label for="OsszesPontszamInput">Pontszám összes:</label>
+            <input type="number" name="OsszesPontszamInput" id="OsszesPontszamInput">
+            <button onclick="ListazClick()">Listáz</button>
+        </div>
+        <br>
+
+        <div id="table">
+        </div>
+    </section>
+    <!--#region finder-->
+    <section id="finder" style="visibility: hidden;">
+        <!-- Tanuló szűrése OM Azonosítójára -->
+        <div class="input_wrapper">
+            <label for="OM_Input">Írja be egy tanuló OM azonosítóját: </label>
+            <input type="number" name="OM_ID" id="OM_Input">
+            <br>
+            <span id="result_span"></span>
+        </div>
+        <div class="result">
+            <table id="result_table">
+                <thead>
+                    <tr>
+                        <th>OM azonosító</th>
+                        <th>Név</th>
+                        <th>Értesítési Cím</th>
+                        <th>Email</th>
+                        <th>Születési Dátum</th>
+                        <th>Matek</th>
+                        <th>Magyar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <!-- #endregion -->
+</body>
+
+</html>
