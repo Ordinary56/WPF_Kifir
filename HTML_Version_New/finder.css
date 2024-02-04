@@ -1,11 +1,13 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+    min-width: 0;
+}
 
 #finder {
     display: grid;
     width: 100vw;
     height: 100vh;
-    grid-template-rows: 250px 1fr;
-    grid-template-columns: 1fr;
-    justify-content: center;
     row-gap: 5px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
@@ -16,8 +18,7 @@
     font-weight: bolder;
 }
 .input_wrapper {
-
-    margin: 15px auto auto auto;
+    margin: 15px auto 15px auto;
     gap: 5px;
     width: 100vw;
     display: flex;
@@ -29,35 +30,40 @@
 }
 
 .result {
+    overflow: scroll;
     border: 1px solid transparent;
-    border-radius: 10px;
     background-color: #2b2b2b;
     display: flex;
-    max-width: fit-content;
-    justify-content:;
+    justify-content: stretch;
+    width: 100vw;
 }
+
 #result_table  {
-    overflow-x: scroll;
-    border: 5px solid rgb(123,123,123);
-    border-radius: 5px;
-    margin: 25px auto;
-    background-color: rgb(123,123,123);
-    padding: 0.5rem;
+    color: white;
     text-align: center;
-    & > tbody {
-        max-width: 60vh;
+    margin: 0 auto 0 auto;
+    width: 100%;
+    border-collapse: collapse;
+    & > thead > tr > th {
+        padding: 10px;
+        background-color: #B2B5C1; 
     }
-    & > tbody > tr {
-        border: none;
-        background-color: aqua;
-    }
-
 }
 
 
+::-webkit-scrollbar {
+    display: none;
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+@media  screen and (max-width: 425px) {
+    .input_wrapper {
+        position: sticky;
+        overflow: hidden;
+    }
 }

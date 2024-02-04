@@ -2,6 +2,7 @@
 using Org.BouncyCastle.Crypto;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
@@ -101,6 +102,25 @@ namespace WPF_Kifir.Repositories
             catch(Exception)
             {
                 return result;
+            }
+        }
+        public async Task AppendCurrentData(ObservableCollection<IFelvetelizo> students)
+        {
+            try
+            {
+                using MySqlConnection connection = GetConnection();
+                await connection.OpenAsync();
+                using MySqlCommand cmd = new("DELETE FROM felvetelizok;", connection);
+                await cmd.ExecuteNonQueryAsync();
+                foreach (Student student in students)
+                {
+                    await Add(student);
+                }
+                await connection.CloseAsync();
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

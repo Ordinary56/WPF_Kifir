@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using WPF_Kifir.Interfaces;
 using WPF_Kifir.Model;
 using WPF_Kifir.Repositories;
@@ -32,9 +33,9 @@ namespace WPF_Kifir
             InitializeComponent();
             _students = new();
             _studentStore = store;
-            _studentStore.ObjectSent += (sender, obj) => 
+            _studentStore.ObjectSent += (sender, obj) =>
             {
-                if(sender != this)
+                if (sender != this)
                 {
                     ReceiveObj(obj);
                 }
@@ -45,7 +46,7 @@ namespace WPF_Kifir
 
         private void ReceiveObj(object obj)
         {
-            if(obj is Student ) 
+            if (obj is Student)
             {
                 Student student = (Student)obj!;
                 if (_students.Any(x => x.OM_Azonosito == student!.OM_Azonosito))
@@ -53,7 +54,7 @@ namespace WPF_Kifir
                     IFelvetelizo old = _students.First(x => x.OM_Azonosito == student!.OM_Azonosito);
                     _students[_students.IndexOf(old)] = student;
                     return;
-                } 
+                }
                 _students.Add(student!);
 
             }
@@ -63,7 +64,7 @@ namespace WPF_Kifir
             }
         }
 
-       private void _students_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void _students_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             // EZ RENDKÍVŰL VESZÉLYES (null check NINCS)
             switch (e.Action)
@@ -85,35 +86,11 @@ namespace WPF_Kifir
                     break;
                 */
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
-                    Task.Run(() =>_repo.Edit((Student)e.NewItems[0]));
+                    Task.Run(() => _repo.Edit((Student)e.NewItems[0]));
                     break;
             }
         }
 
-        private async Task LoadFromDatabase()
-        {
-                    _students.CollectionChanged += _students_CollectionChanged;
-                    List<Student>? result = await _repo.GetStudentsAsync();
-                    if (result?.Count < 1 || result == null) 
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            MessageBox.Show("Hiba, nem lehet betölteni az adatokat az adatbázisból!\n A Program nem tud az adatbázissal " +
-                                "kommunikálni.", "Error",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
-                        });
-                        _students.CollectionChanged -= _students_CollectionChanged;
-                        return;
-                    }
-                    foreach (Student student in result ?? Enumerable.Empty<Student>())
-                    {
-                        Application.Current.Dispatcher.Invoke( () =>
-                        {
-                            _students.Add(student);
-                        });
-                    }
-                    B_5.IsEnabled = false;
-        }
 
         void Quit(object sender, RoutedEventArgs e) => Close();
 
@@ -131,7 +108,7 @@ namespace WPF_Kifir
                 case '2':
                     if (dg_Students.SelectedIndex == -1) return;
                     _newStudent = new(_studentStore);
-                    _studentStore.SendMessage(this,(_students[dg_Students.SelectedIndex] as Student)!);
+                    _studentStore.SendMessage(this, (_students[dg_Students.SelectedIndex] as Student)!);
                     _newStudent.ShowDialog();
                     break;
                 case '3':
@@ -145,12 +122,53 @@ namespace WPF_Kifir
                     await LoadFromDatabase();
                     break;
                 case '6':
+                    await AppendToDatabase();
+                    break;
+                case '7':
                     await Export();
                     break;
                 default:
                     break;
             }
 
+        }
+        private async Task LoadFromDatabase()
+        {
+            _students.CollectionChanged += _students_CollectionChanged;
+            List<Student>? result = await _repo.GetStudentsAsync();
+            if (result?.Count < 1 || result == null)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    MessageBox.Show("Hiba, nem lehet betölteni az adatokat az adatbázisból!\n A Program nem tud az adatbázissal " +
+                        "kommunikálni.", "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                });
+                _students.CollectionChanged -= _students_CollectionChanged;
+                return;
+            }
+            foreach (Student student in result ?? Enumerable.Empty<Student>())
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _students.Add(student);
+                });
+            }
+            B_5.IsEnabled = false;
+        }
+
+        async Task AppendToDatabase()
+        {
+            try
+            {
+                await _repo.AppendCurrentData(_students);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Hiba: Nem lehet beszúrni az adatbázisba:\n{e.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
         }
 
         async Task Export()
@@ -200,7 +218,7 @@ namespace WPF_Kifir
 
         async Task Import()
         {
-          
+
             OpenFileDialog ofd = new()
             {
                 Filter = "Comma Seperated Value (.csv) | *.csv | JavaScript Object Notation (JSON) | *.json"
@@ -223,7 +241,7 @@ namespace WPF_Kifir
 
         async Task OpenAs(OpenFileDialog ofd)
         {
-            switch(System.IO.Path.GetExtension(ofd.FileName))
+            switch (System.IO.Path.GetExtension(ofd.FileName))
             {
                 case ".json":
                     using (FileStream stream = File.OpenRead(ofd.FileName))
