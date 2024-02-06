@@ -16,7 +16,6 @@
 #result_span {
     white-space: pre-wrap;
     text-align: center;
-    color: red;
     font-weight: bolder;
 }
 
@@ -41,26 +40,32 @@
 }
 
 #result_table {
-    color: white;
     background-color: #2b2b2b;
     width: 100%;
     text-align: center;
     margin: 0 auto;
     border-collapse: collapse;
     border-radius: 10px;
-    box-shadow: 15px 15px 5px #2b2b2b;
+    box-shadow: 10px 9px 5px #1a1a1a;
+
     &>thead>tr>th {
         padding: 10px;
         background-color: rgba(5, 5, 5, 1);
     }
 
-    & > thead >tr >th:first-child {
-        border-radius: 10px 0 0 0 ;
+    &,
+    th:first-child {
+        border-radius: 10px 0 0 0;
     }
 
-    & > thead > tr > th:last-child {
+    &,
+    th:last-child {
+        border-radius: 0 10px 0 0;
+    }
 
-        border-radius: 0 10px 0 0 ;
+    &,
+    td {
+        padding: 10px;
     }
 }
 
@@ -75,7 +80,7 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
-@media screen and (max-width: 425px){
+@media screen and (max-width: 425px) {
     .result {
         overflow-x: scroll;
     }
