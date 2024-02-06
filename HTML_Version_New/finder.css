@@ -5,10 +5,11 @@
 }
 
 #finder {
-    display: grid;
+    display: flex;
+    flex-flow: row wrap;
     width: 100vw;
     height: 100vh;
-    row-gap: 5px;
+    gap: 5px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
@@ -33,23 +34,24 @@
 .result {
     border: 1px solid transparent;
     display: flex;
+    flex-flow: column wrap;
     justify-content: center;
-    width: 100vw;
     padding: 50px;
+    width: 100vw;
 }
 
 #result_table {
     color: white;
     background-color: #2b2b2b;
+    width: 100%;
     text-align: center;
     margin: 0 auto;
-    width: 100%;
     border-collapse: collapse;
     border-radius: 10px;
     box-shadow: 15px 15px 5px #2b2b2b;
     &>thead>tr>th {
         padding: 10px;
-        background-color: rgba(3, 3, 3, 1);
+        background-color: rgba(5, 5, 5, 1);
     }
 
     & > thead >tr >th:first-child {
@@ -73,13 +75,8 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
-@media screen  and (max-width: 425px){
+@media screen and (max-width: 425px){
     .result {
-        justify-items: stretch;
-    }
-    #result_table > thead > tr >th {
-        position: sticky;
-        top: 0;
-        
+        overflow-x: scroll;
     }
 }

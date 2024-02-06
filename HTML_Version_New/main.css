@@ -4,9 +4,10 @@
     box-sizing: border-box;
     margin: 0;
 }
-
+body {
+    background-color: #272537;
+}
 nav {
-    border-radius: 0 0 5px 5px;
     display: flex;
     width: 100vw;
     flex-flow: row wrap;
@@ -14,10 +15,7 @@ nav {
     margin: auto auto 2% auto;
     background-color: transparent;
     padding: 0.4rem;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    box-shadow: 5px 10px 13px rgba(0,0,0,0.5);
+    overflow: hidden;
 }
 
 .menu_header {
@@ -44,13 +42,5 @@ button {
     &:hover {
         cursor: pointer;
         background-color: #545434;
-    }
-}
-
-@media screen and (max-width: 425px) {
-    nav {
-        position: sticky;
-        top: 0;
-        z-index: 10;
     }
 }
