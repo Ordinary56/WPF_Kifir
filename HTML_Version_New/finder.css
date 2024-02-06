@@ -11,6 +11,7 @@
     row-gap: 5px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+
 #result_span {
     white-space: pre-wrap;
     text-align: center;
@@ -30,36 +31,25 @@
 }
 
 .result {
-    overflow: scroll;
+    overflow: auto;
     border: 1px solid transparent;
+    border-radius: 10px;
     display: flex;
-    justify-content: stretch;
     width: 100vw;
-    padding: 50px;
+    justify-content: stretch;
 }
-
 #result_table  {
     color: white;
     background-color: #2b2b2b;
     text-align: center;
     margin: 0 auto;
-    width: 100%;
+    max-width: 60vw;
     border-collapse: collapse;
     & > thead > tr > th {
         padding: 10px;
-        background-color: rgba(3, 3, 3, 0.7); 
+        background-color: rgba(3, 3, 3,1); 
         position: sticky;
         top:0;
     }
 }
 
-
-::-webkit-scrollbar {
-    display: none;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}

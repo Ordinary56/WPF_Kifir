@@ -1,0 +1,70 @@
+.Listaz{
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+input{
+    background-color: #353334;
+    color: #CFCFCF;
+    border: 1px solid #CFCFCF;
+    border-radius: 6px;
+}
+#container{
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 50px;
+    text-align: center;
+    display: flex;
+    flex-direction:column;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+  
+  @media screen and (min-width: 320px) {
+    .Listaz {
+      flex-direction: column;
+      align-items: center;
+
+    }
+
+    .Listaz button {
+        margin-top: 10px;
+       margin-right: 0;
+
+    }
+    #table {
+        overflow: auto;
+        max-height: 500px;
+    }
+  }
+  
+  #table {
+    width: 100%;   
+    border-radius: 5px;
+    border-spacing: 0;
+    text-align: center;
+  }
+  
+  #table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  #table th,
+  #table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+
+  #table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: rgba(3, 3, 3,1);
+    color: white;
+  }

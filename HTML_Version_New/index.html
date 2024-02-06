@@ -15,14 +15,15 @@
 
   <body>
     <nav>
-      <button class="menu_button" id="main_menu">Főmenü</button>
+      <button class="menu_button" id="main_menu">Szűrés</button>
       <h2 class="menu_header">Kifir</h2>
       <button class="menu_button" id="find_menu">Keresés</button>
     </nav>
     <section id="filter">
       <!-- táblázat megjelenítése -->
+      <div class="container">
       <div class="Listaz">
-        <label for="OsszesPontszamInput">Pontszám összes:</label>
+        <label for="OsszesPontszamInput">Összes elért pontszám:</label>
         <input
           type="number"
           name="OsszesPontszamInput"
@@ -30,6 +31,7 @@
         />
         <button onclick="ListazClick()">Listáz</button>
       </div>
+    </div>
       <br />
 
       <div id="table"></div>
