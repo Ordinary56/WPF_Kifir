@@ -2,13 +2,13 @@
 //@ts-check
 /**
  * @typedef  {Object} Student
- * @property {string} OM_ID
- * @property {string} Name
- * @property {string} Address
- * @property {string} Date
+ * @property {string} OM_Azonosito
+ * @property {string} Neve
+ * @property {string} Ertesitesi_cime
+ * @property {string} Szuletesi_Datum
  * @property {string} Email
- * @property {number} Math
- * @property {number} Hungarian
+ * @property {number} Matematika
+ * @property {number} Magyar
  */
 
 // Megjegyzés: Firefoxon az import assertion nem működik

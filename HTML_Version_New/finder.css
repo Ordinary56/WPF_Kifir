@@ -11,12 +11,14 @@
     row-gap: 5px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+
 #result_span {
     white-space: pre-wrap;
     text-align: center;
     color: red;
     font-weight: bolder;
 }
+
 .input_wrapper {
     margin: 15px auto 15px auto;
     gap: 5px;
@@ -26,30 +28,37 @@
     align-items: center;
     justify-content: center;
     border: 1px solid transparent;
-
 }
 
 .result {
-    overflow: scroll;
     border: 1px solid transparent;
     display: flex;
-    justify-content: stretch;
+    justify-content: center;
     width: 100vw;
     padding: 50px;
 }
 
-#result_table  {
+#result_table {
     color: white;
     background-color: #2b2b2b;
     text-align: center;
     margin: 0 auto;
     width: 100%;
     border-collapse: collapse;
-    & > thead > tr > th {
+    border-radius: 10px;
+    box-shadow: 15px 15px 5px #2b2b2b;
+    &>thead>tr>th {
         padding: 10px;
-        background-color: rgba(3, 3, 3, 0.7); 
-        position: sticky;
-        top:0;
+        background-color: rgba(3, 3, 3, 1);
+    }
+
+    & > thead >tr >th:first-child {
+        border-radius: 10px 0 0 0 ;
+    }
+
+    & > thead > tr > th:last-child {
+
+        border-radius: 0 10px 0 0 ;
     }
 }
 
@@ -60,6 +69,17 @@
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+@media screen  and (max-width: 425px){
+    .result {
+        justify-items: stretch;
+    }
+    #result_table > thead > tr >th {
+        position: sticky;
+        top: 0;
+        
+    }
 }

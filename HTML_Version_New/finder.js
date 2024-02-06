@@ -1,10 +1,9 @@
 "use strict";
 //@ts-check
 
+/** @typedef {import("./main.js").Student} Student */
 
-/**@typedef {import("./main").Student} Student */
-
-/**@type {Student[]} */
+/** @type {Student[]} */
 import { data } from "./main.js";
 
 
@@ -24,8 +23,10 @@ const DisplayStudent = (students) => {
             row.appendChild(data)
         }
         result_Table.children[1].appendChild(row);
-    })
-
+    });
+    const Math_average = (students.reduce((acc, current) => acc + current.Matematika, 0) / students.length).toFixed(1);
+    const Hungarian_average = (students.reduce((acc, current) => acc + current.Magyar, 0) / students.length).toFixed(1);
+    document.getElementById("result_span").innerText += `\nMatematika átlaga: ${Math_average}\nMagyar átlaga: ${Hungarian_average}`;
 };
 
 
@@ -39,7 +40,7 @@ const FindStudent = (input) => {
      * @type {Student[]|undefined}
      */
     let students;
-    students = input.length == 0 ? data.sort((a,b) => a.Neve.localeCompare(b.Neve)) : data.filter(x => x.OM_Azonosito.startsWith(input)).sort((a,b) => a.Neve.localeCompare(b.Neve));
+    students = input.length == 0 ? data.sort((a, b) => a.Neve.localeCompare(b.Neve)) : data.filter(x => x.OM_Azonosito.startsWith(input)).sort((a, b) => a.Neve.localeCompare(b.Neve));
     document.getElementById("result_span").textContent = `${students.length} db találat`;
     DisplayStudent(students);
 }

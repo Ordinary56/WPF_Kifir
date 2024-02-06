@@ -6,42 +6,48 @@
 }
 
 nav {
-    border: 2px solid rgba(240, 240, 240, 0.8);
     border-radius: 0 0 5px 5px;
     display: flex;
     width: 100vw;
     flex-flow: row wrap;
     justify-content: space-between;
     margin: auto auto 2% auto;
+    background-color: transparent;
     padding: 0.4rem;
-   background-color: #BBBBBB;  
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    box-shadow: 5px 10px 13px rgba(0,0,0,0.5);
 }
 
 .menu_header {
-    flex: auto;
+    flex: 15;
     text-align: center;
     align-self: center;
 }
 
 .menu_button {
-    flex: 10%;
+    flex: 10;
     background-color: #3434FF;
+
     &:hover {
         background-color: #0101BB;
-        color:white
+        color: white
     }
 }
+
 button {
     border: none;
     border-radius: 12px;
     padding: .8rem;
+
     &:hover {
         cursor: pointer;
         background-color: #545434;
     }
 }
 
-@media screen and (max-width: 425px){
+@media screen and (max-width: 425px) {
     nav {
         position: sticky;
         top: 0;
