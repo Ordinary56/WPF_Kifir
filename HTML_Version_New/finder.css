@@ -32,21 +32,24 @@
 .result {
     overflow: scroll;
     border: 1px solid transparent;
-    background-color: #2b2b2b;
     display: flex;
     justify-content: stretch;
     width: 100vw;
+    padding: 50px;
 }
 
 #result_table  {
     color: white;
+    background-color: #2b2b2b;
     text-align: center;
-    margin: 0 auto 0 auto;
+    margin: 0 auto;
     width: 100%;
     border-collapse: collapse;
     & > thead > tr > th {
         padding: 10px;
-        background-color: #B2B5C1; 
+        background-color: rgba(3, 3, 3, 0.7); 
+        position: sticky;
+        top:0;
     }
 }
 
@@ -59,11 +62,4 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-@media  screen and (max-width: 425px) {
-    .input_wrapper {
-        position: sticky;
-        overflow: hidden;
-    }
 }
