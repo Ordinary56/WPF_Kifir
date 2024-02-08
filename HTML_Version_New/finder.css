@@ -31,19 +31,16 @@
 }
 
 .result {
-    border: 1px solid transparent;
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: center;
-    padding: 50px;
-    width: 100vw;
-}
 
-#result_table {
+    border: 1px solid transparent;
+    border-radius: 10px;
+    display: flex;
+
     background-color: #2b2b2b;
     width: 100%;
     text-align: center;
     margin: 0 auto;
+
     border-collapse: collapse;
     border-radius: 10px;
     box-shadow: 10px 9px 5px #1a1a1a;
@@ -66,22 +63,4 @@
     &,
     td {
         padding: 10px;
-    }
-}
 
-
-::-webkit-scrollbar {
-    display: none;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-@media screen and (max-width: 425px) {
-    .result {
-        overflow-x: scroll;
-    }
-}

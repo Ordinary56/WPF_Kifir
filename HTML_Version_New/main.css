@@ -3,12 +3,9 @@
     min-width: 0;
     box-sizing: border-box;
     margin: 0;
-    color: #CFCFCF;
-}
-body {
-    background-color: #272537;
 }
 nav {
+
     display: flex;
     width: 100vw;
     flex-flow: row wrap;
@@ -16,7 +13,7 @@ nav {
     margin: auto auto 2% auto;
     background-color: transparent;
     padding: 0.4rem;
-    overflow: hidden;
+
 }
 
 .menu_header {
@@ -25,23 +22,64 @@ nav {
     align-self: center;
 }
 
-.menu_button {
-    flex: 10;
-    background-color: #3434FF;
 
-    &:hover {
-        background-color: #0101BB;
-        color: white
+
+button {
+    border: 1px solid #CFCFCF;   
+    background-color: Transparent;
+    color: #CFCFCF;
+    border-radius: 15px;
+    padding: .8rem;
+}
+
+@media screen and (max-width: 425px){
+    nav {
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
+}
+table  {
+    overflow: auto;
+    border-radius: 5px;
+    margin: 0px auto;
+    background-color: rgb(123,123,123);
+    padding: 0.5rem;
+    max-width: 60vw;
+    text-align: center;
+    & > tbody {
+        max-width: 60vh;
+    }
+}
+tbody > tr  {
+    border: none;
+    background-color: #2b2b2b;
 }
 
 button {
-    border: none;
-    border-radius: 12px;
+    border: 1px solid #CFCFCF;   
+    background-color: Transparent;
+    color: #CFCFCF;
+    border-radius: 15px;
     padding: .8rem;
-
-    &:hover {
+    width: 150px;
+    &:hover{
+        background-color: #e0d2d1;
         cursor: pointer;
-        background-color: #545434;
+        color: Black;
     }
+}
+
+@media  screen and (max-width: 768) {
+    body {
+        grid-template-columns: repeat(2,250px);
+        grid-template-rows: repeat(2,350px);
+    } 
+    .finder {
+        grid-column: span 2;
+    }
+    .result {
+        grid-column: span 2;
+    }
+
 }

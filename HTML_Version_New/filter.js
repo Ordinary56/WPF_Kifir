@@ -6,7 +6,7 @@ import { data } from "./main.js";
 function ListazClick() {
     // Get the div where you want to append the table
     const divElement = document.getElementById('table');
-
+ 
     const OsszesPontszamInput = document.getElementById('OsszesPontszamInput').value;
     
    
@@ -110,6 +110,8 @@ function ListazClick() {
 
     // Append the table to the div
     divElement.appendChild(table);
+
+    
 }}
 
 // Máskülönben nem találja a html
