@@ -3,60 +3,26 @@
     min-width: 0;
     box-sizing: border-box;
     margin: 0;
-    padding: 0;
 }
-
-body{
-    background-color: #272537;
-    color: #CFCFCF;
-}
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  margin: 0;
-}
-
 nav {
-    border-bottom: 2px solid rgba(240, 240, 240, 0.8);
+
     display: flex;
     width: 100vw;
     flex-flow: row wrap;
     justify-content: space-between;
     margin: auto auto 2% auto;
+    background-color: transparent;
     padding: 0.4rem;
-   background-color: #2b2b2b;  
+
 }
 
 .menu_header {
-    flex: auto;
+    flex: 15;
     text-align: center;
     align-self: center;
 }
 
-.menu_button {
-    flex: 10%;
-    background-color: transparent;
-    border: 1px solid #CFCFCF;
-    &:hover {
-        background-color: #e0d2d1;
-        cursor: pointer;
-        color:Black
-    }
-}
-input {
-        margin-top:10px ;
-        text-align: center;
-        height: 30px;
-    }
 
-::-webkit-scrollbar {
-    height: 7px;
-    width: 7px;
-}
-
-::-webkit-scrollbar-corner{
-    background-color: transparent;
-}
 
 button {
     border: 1px solid #CFCFCF;   
@@ -64,12 +30,6 @@ button {
     color: #CFCFCF;
     border-radius: 15px;
     padding: .8rem;
-    width: 150px;
-    &:hover{
-        background-color: #e0d2d1;
-        cursor: pointer;
-        color: Black;
-    }
 }
 
 @media screen and (max-width: 425px){
@@ -121,5 +81,5 @@ button {
     .result {
         grid-column: span 2;
     }
-    
+
 }
