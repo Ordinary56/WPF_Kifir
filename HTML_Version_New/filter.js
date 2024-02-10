@@ -2,73 +2,68 @@
 //@ts-check
 
 import { data } from "./main.js";
+const SortByClick = (value) => {
+    switch (value) {
+        case "Neve":
+        case "ErtesitesiCime":
+        case "Email":
+            data.sort((a, b) =>
+                a[value].localeCompare(b[value])
+            );
+            break;
+        case "Matek":
+        case "Magyar":
+        case "OM_Azonosito":
+        case "Összespontszam":
+        data.sort((a, b) =>
+                a[value] - b[value]
+            );
+            break;
+        case "SzuletesiDatum":
+            data.sort((a, b) => {
+                new Date(a[value]) - new Date(b[value])
+            });
+            break;
+    }
+    Listaz(data);
+};
 
 
+const Filter = (headerrow) => {
+    switch (headerrow.innerText) {
+        case "Összes Pontszám":
+            SortByClick("Összes Pontszám")
+            break;
+        case "Matek":
+            SortByClick("Matematika");
+            break;
+        case "Magyar":
+            SortByClick("Magyar");
+            break;
+        case "Email":
+            SortByClick("Email");
+            break;
+        case "Neve":
+            SortByClick("Neve");
+            break;
+        case "OM azonosító":
+            SortByClick("OM_Azonosito");
+            break;
+        case "Értesítési Címe":
+            SortByClick("ErtesitesiCime");
+            break;
+        case "Születési Dátum":
+            SortByClick("SzuletesiDatum");
+            break;
+    }
+
+};
 function Listaz() {
 
     const OsszesPontszamInput = document.getElementById('OsszesPontszamInput').value;
     const table = document.getElementById('dynamically_generated_table');
 
-    table.querySelectorAll("th").forEach((headerrow) => {
-        headerrow.addEventListener("click", (e) => {
-            Filter(e.target);
-        });
-    });
-    const SortByClick = (value) => {
-        switch (value) {
-            case "Neve":
-            case "ErtesitesiCime":
-            case "Email":
-                data.sort((a, b) =>
-                    a[value].localeCompare(b[value])
-                );
-                break;
-            case "Matek":
-            case "Magyar":
-            case "OM_Azonosito":
-            case "Összespontszam":
-            data.sort((a, b) =>
-                    a[value] - b[value]
-                );
-                break;
-            case "SzuletesiDatum":
-                data.sort((a, b) => {
-                    new Date(a[value]) - new Date(b[value])
-                });
-                break;
-        }
-        Listaz(data);
-    };
-    const Filter = (headerrow) => {
-        switch (headerrow.innerText) {
-            case "Összes Pontszám":
-                SortByClick("Összes Pontszám")
-                break;
-            case "Matek":
-                SortByClick("Matematika");
-                break;
-            case "Magyar":
-                SortByClick("Magyar");
-                break;
-            case "Email":
-                SortByClick("Email");
-                break;
-            case "Neve":
-                SortByClick("Neve");
-                break;
-            case "OM azonosító":
-                SortByClick("OM_Azonosito");
-                break;
-            case "Értesítési Címe":
-                SortByClick("ErtesitesiCime");
-                break;
-            case "Születési Dátum":
-                SortByClick("SzuletesiDatum");
-                break;
-        }
-
-    };
-
+    
   
 
     // Check if OsszesPontszamInput is a valid number
@@ -129,7 +124,9 @@ function Listaz() {
 
     }
 }
-
+document.querySelectorAll("th").forEach(
+    x => x.addEventListener("click",e => Filter(e.target))
+);
 // Máskülönben nem találja a html
 window.Listaz = Listaz;
 
