@@ -1,61 +1,59 @@
 <!DOCTYPE html>
 <html lang="hu">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kifir</title>
-    <link rel="icon" type="image/png" href="favicon.ico" />
-    <link rel="stylesheet" href="./finder.css" media="all" />
-    <link rel="stylesheet" href="./filter.css" media="all" />
-    <link rel="stylesheet" href="./main.css" media="all" />
-    <script defer src="./main.js" type="module"></script>
-    <script defer src="./finder.js" type="module"></script>
-    <script defer src="./filter.js" type="module"></script>
-  </head>
 
-  <body>
-    <nav>
-      <button class="menu_button" id="main_menu">Szűrés</button>
-      <h2 class="menu_header">Kifir</h2>
-      <button class="menu_button" id="find_menu">Keresés</button>
-    </nav>
-    <section id="filter">
-      <!-- táblázat megjelenítése -->
-      <div class="container">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kifir</title>
+  <link rel="icon" type="image/png" href="favicon.ico" />
+  <link rel="stylesheet" href="./finder.css" media="all" />
+  <link rel="stylesheet" href="./filter.css" media="all" />
+  <link rel="stylesheet" href="./main.css" media="all" />
+  <script defer src="./main.js" type="module"></script>
+  <script defer src="./finder.js" type="module"></script>
+  <script defer src="./filter.js" type="module"></script>
+</head>
+
+<body>
+  <nav>
+    <button id="main_menu">Szűrés</button>
+    <h2>Kifir</h2>
+    <button id="find_menu">Keresés</button>
+  </nav>
+  <section id="filter">
+    <!-- táblázat megjelenítése -->
+    <div class="container">
       <div class="Listaz">
         <label for="OsszesPontszamInput">Összes elért pontszám:</label>
-        <input
-          type="number"
-          name="OsszesPontszamInput"
-          id="OsszesPontszamInput"
-        />
+        <input type="number" name="OsszesPontszamInput" id="OsszesPontszamInput" />
         <button onclick="ListazClick()">Listáz</button>
       </div>
     </div>
-      <br />
+    <br />
 
-      <div id="table"></div>
-    </section>
-    <!--#region finder-->
-    <section id="finder" style="visibility: hidden">
-      <!-- Tanuló szűrése OM Azonosítójára -->
-      <div class="input_wrapper">
-        <label for="OM_Input">Írja be egy tanuló OM azonosítóját: </label>
-        <input type="number" name="OM_ID" id="OM_Input" />
-        <br />
-        <span id="result_span"></span>
-      </div>
-      <div class="result">
+    <div id="table"></div>
+  </section>
+  <!--#region finder-->
+  <section id="finder" style="visibility: hidden">
+    <!-- Tanuló szűrése OM Azonosítójára -->
+    <div class="input_wrapper">
+      <label for="OM_Input">Írja be egy tanuló OM azonosítóját: </label>
+      <input type="number" name="OM_ID" id="OM_Input" />
+      <br />
+      <span id="result_span"></span>
+    </div>
+    <div class="result">
+      <div style="width:100%;">
         <table id="result_table">
           <thead>
             <tr>
-              <th>OM azonosító</th>
-              <th>Név</th>
-              <th>Értesítési Cím</th>
-              <th>Email</th>
-              <th>Születési Dátum</th>
-              <th>Matek</th>
-              <th>Magyar</th>
+              <th data-direction="up">OM azonosító</th>
+              <th data-direction="up">Neve</th>
+              <th data-direction="up">Értesítési Címe</th>
+              <th data-direction="up">Email</th>
+              <th data-direction="up">Születési Dátum</th>
+              <th data-direction="up">Matek</th>
+              <th data-direction="up">Magyar</th>
             </tr>
           </thead>
           <tbody>
@@ -63,7 +61,9 @@
           </tbody>
         </table>
       </div>
-    </section>
-    <!-- #endregion -->
-  </body>
+    </div>
+  </section>
+  <!-- #endregion -->
+</body>
+
 </html>
