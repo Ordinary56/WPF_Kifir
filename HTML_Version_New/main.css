@@ -3,83 +3,78 @@
     min-width: 0;
     box-sizing: border-box;
     margin: 0;
+    color: #CFCFCF;
+    ::-webkit-scrollbar {
+        height: 10px;
+        width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #454348;
+        border-radius: 5px;
+    }
+    ::-webkit-scrollbar-corner {
+        display: none;
+    }
 }
-nav {
 
+body {
+    background-color: #272537;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+input {
+    background-color: #353334;
+    color: #CFCFCF;
+    border: 1px solid #CFCFCF;
+    border-radius: 6px;
+    text-align: center;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+nav {
     display: flex;
     width: 100vw;
-    flex-flow: row wrap;
-    justify-content: space-between;
+    flex-flow: row nowrap;
+    justify-content: center;
     margin: auto auto 2% auto;
     background-color: transparent;
     padding: 0.4rem;
 
+    &,
+    button {
+        flex: 5%;
+        margin: 5px;
+    }
+
+    & > h2 {
+        text-align: center;
+        align-self: center;
+        flex: 2;
+    }
 }
 
-.menu_header {
-    flex: 15;
-    text-align: center;
-    align-self: center;
-}
 
 
 
 button {
-    border: 1px solid #CFCFCF;   
+    border: 1px solid #CFCFCF;
     background-color: Transparent;
     color: #CFCFCF;
     border-radius: 15px;
     padding: .8rem;
+    cursor: pointer;
 }
-
-@media screen and (max-width: 425px){
-    nav {
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-}
-table  {
-    overflow: auto;
-    border-radius: 5px;
-    margin: 0px auto;
-    background-color: rgb(123,123,123);
-    padding: 0.5rem;
-    max-width: 60vw;
-    text-align: center;
-    & > tbody {
-        max-width: 60vh;
-    }
-}
-tbody > tr  {
-    border: none;
-    background-color: #2b2b2b;
-}
-
-button {
-    border: 1px solid #CFCFCF;   
-    background-color: Transparent;
-    color: #CFCFCF;
-    border-radius: 15px;
-    padding: .8rem;
-    width: 150px;
-    &:hover{
-        background-color: #e0d2d1;
-        cursor: pointer;
-        color: Black;
-    }
-}
-
-@media  screen and (max-width: 768) {
-    body {
-        grid-template-columns: repeat(2,250px);
-        grid-template-rows: repeat(2,350px);
-    } 
-    .finder {
-        grid-column: span 2;
-    }
-    .result {
-        grid-column: span 2;
-    }
-
+button:hover {
+    background-color: #CFCFCF;
+    color: black;
 }

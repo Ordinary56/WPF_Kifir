@@ -3,80 +3,100 @@
 
 import { data } from "./main.js";
 
-function ListazClick() {
-    // Get the div where you want to append the table
-    const divElement = document.getElementById('table');
- 
+
+function Listaz() {
+
     const OsszesPontszamInput = document.getElementById('OsszesPontszamInput').value;
-    
-   
+    const table = document.getElementById('dynamically_generated_table');
+
+    table.querySelectorAll("th").forEach((headerrow) => {
+        headerrow.addEventListener("click", (e) => {
+            Filter(e.target);
+        });
+    });
+    const SortByClick = (value) => {
+        switch (value) {
+            case "Neve":
+            case "ErtesitesiCime":
+            case "Email":
+                data.sort((a, b) =>
+                    a[value].localeCompare(b[value])
+                );
+                break;
+            case "Matek":
+            case "Magyar":
+            case "OM_Azonosito":
+            case "Összespontszam":
+            data.sort((a, b) =>
+                    a[value] - b[value]
+                );
+                break;
+            case "SzuletesiDatum":
+                data.sort((a, b) => {
+                    new Date(a[value]) - new Date(b[value])
+                });
+                break;
+        }
+        Listaz(data);
+    };
+    const Filter = (headerrow) => {
+        switch (headerrow.innerText) {
+            case "Összes Pontszám":
+                SortByClick("Összes Pontszám")
+                break;
+            case "Matek":
+                SortByClick("Matematika");
+                break;
+            case "Magyar":
+                SortByClick("Magyar");
+                break;
+            case "Email":
+                SortByClick("Email");
+                break;
+            case "Neve":
+                SortByClick("Neve");
+                break;
+            case "OM azonosító":
+                SortByClick("OM_Azonosito");
+                break;
+            case "Értesítési Címe":
+                SortByClick("ErtesitesiCime");
+                break;
+            case "Születési Dátum":
+                SortByClick("SzuletesiDatum");
+                break;
+        }
+
+    };
+
+  
+
     // Check if OsszesPontszamInput is a valid number
     if (OsszesPontszamInput !== '' && !isNaN(OsszesPontszamInput)) {
         const existingTable = document.getElementById('dynamic-table');
-        if(OsszesPontszamInput > 100){
+        if (OsszesPontszamInput > 100) {
             return;
         }
         if (existingTable) {
-          divElement.removeChild(existingTable);
+            table.removeChild(existingTable);
         }
 
-    // Create a table element
-    const table = document.createElement('table');
-    table.id = 'dynamic-table';
+        const tableBody = document.createElement('tbody');
+        tableBody.id = 'dynamic-table';
 
-    // Create a header row
-    const headerRow = document.createElement('tr');
+        // Add data rows
+        const sortedData = data.filter(dataItem => dataItem.Matematika + dataItem.Magyar >= OsszesPontszamInput);
 
-    const OM_Azonosito = document.createElement('th');
-    OM_Azonosito.textContent = 'OM Azonosító';
-    headerRow.appendChild(OM_Azonosito);
+        sortedData.forEach(dataItem => {
+            const dataRow = document.createElement('tr');
 
-    const Neve = document.createElement('th');
-    Neve.textContent = 'Neve';
-    headerRow.appendChild(Neve);
+            const OM_AzonositoCell = document.createElement('td');
+            OM_AzonositoCell.textContent = dataItem.OM_Azonosito;
+            dataRow.appendChild(OM_AzonositoCell);
 
-    const ErtesitesiCime = document.createElement('th');
-    ErtesitesiCime.textContent = 'Értesitesi Címe';
-    headerRow.appendChild(ErtesitesiCime);
-
-    const Email = document.createElement('th');
-    Email.textContent = 'Email';
-    headerRow.appendChild(Email);
-
-    const SzuletesiDatum = document.createElement('th');
-    SzuletesiDatum.textContent = 'Születési Dátum';
-    headerRow.appendChild(SzuletesiDatum);
-
-    const Matematika = document.createElement('th');
-    Matematika.textContent = 'Matematika';
-    headerRow.appendChild(Matematika);
-
-    const Magyar = document.createElement('th');
-    Magyar.textContent = 'Magyar';
-    headerRow.appendChild(Magyar);
-
-    const OsszesPontszam = document.createElement('th');
-    OsszesPontszam.textContent = 'Összes Pontszám';
-    headerRow.appendChild(OsszesPontszam)
-
-    table.appendChild(headerRow);
-
-    // Create a body for the table
-    const tableBody = document.createElement('tbody');
-
-    // Add data rows
-    const sortedData = data.filter(dataItem => dataItem.Matematika + dataItem.Magyar >= OsszesPontszamInput).sort((a, b) => a.Neve.localeCompare(b.Neve));
-
-    sortedData.forEach(dataItem => {
-      const dataRow = document.createElement('tr');
-
-      const OM_AzonositoCell = document.createElement('td');
-      OM_AzonositoCell.textContent = dataItem.OM_Azonosito;
-      dataRow.appendChild(OM_AzonositoCell);
-
-      const NeveCell = document.createElement('td');
-      NeveCell.textContent = dataItem.Neve;
-      dataRow.appendChild(NeveCell);
+            const NeveCell = document.createElement('td');
+            NeveCell.textContent = dataItem.Neve;
+            dataRow.appendChild(NeveCell);
 
             const ErtesitesiCimeCell = document.createElement('td');
             ErtesitesiCimeCell.textContent = dataItem.ErtesitesiCime;
@@ -105,14 +125,12 @@ function ListazClick() {
             tableBody.appendChild(dataRow);
         });
 
-    
-    table.appendChild(tableBody);
+        table.appendChild(tableBody);
 
-    // Append the table to the div
-    divElement.appendChild(table);
-
-    
-}}
+    }
+}
 
 // Máskülönben nem találja a html
-window.ListazClick = ListazClick;
+window.Listaz = Listaz;
+
+//Feladom
