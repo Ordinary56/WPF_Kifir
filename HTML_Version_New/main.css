@@ -27,6 +27,19 @@ body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+input {
+    background-color: #353334;
+    color: #CFCFCF;
+    border: 1px solid #CFCFCF;
+    border-radius: 6px;
+    text-align: center;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
 nav {
     display: flex;
@@ -60,4 +73,8 @@ button {
     border-radius: 15px;
     padding: .8rem;
     cursor: pointer;
+}
+button:hover {
+    background-color: #CFCFCF;
+    color: black;
 }

@@ -103,6 +103,29 @@ const DisplayStudent = (students) => {
   document.getElementById(
     "result_span"
   ).innerText += `\nMatematika átlaga: ${Math_average}\nMagyar átlaga: ${Hungarian_average}`;
+  const result_Table = document.getElementById("result_table");
+  result_Table.children[1].textContent = "";
+  document.getElementById("result_span").innerText = "";
+  students.forEach((student) => {
+    let row = document.createElement("tr");
+    let data;
+    for (let key in student) {
+      data = document.createElement("td");
+      data.innerText = student[key];
+      row.appendChild(data);
+    }
+    result_Table.children[1].appendChild(row);
+  });
+  const Math_average = (
+    students.reduce((acc, current) => acc + current.Matematika, 0) /
+    students.length
+  ).toFixed(1);
+  const Hungarian_average = (
+    students.reduce((acc, current) => acc + current.Magyar, 0) / students.length
+  ).toFixed(1);
+  document.getElementById(
+    "result_span"
+  ).innerText += `\nMatematika átlaga: ${Math_average}\nMagyar átlaga: ${Hungarian_average}`;
 };
 
 /**
@@ -133,3 +156,4 @@ document.querySelectorAll("th").forEach((header) => {
   });
 });
 FindStudent("");
+
