@@ -1,12 +1,17 @@
 "use strict";
 //@ts-check
-
+// Valamiért Prettier így formázza a fájlt
 /** @typedef {import("./main.js").Student} Student */
 
 /** @type {Student[]} */
 import { data } from "./main.js";
 let students = data;
-
+/**
+ * Sorts the data by the given property
+ * @param {string} direction
+ * @param {string} property
+ * @returns {void}
+ */
 const SortData = (direction, property) => {
   switch (property) {
     case "Neve":
@@ -37,7 +42,7 @@ const SortData = (direction, property) => {
 };
 
 /**
- *
+ * 
  * @param {HTMLTableCellElement} header
  * @returns {void}
  */
@@ -70,6 +75,7 @@ const FilterByHeader = (header) => {
 };
 
 /**
+ * Displays the data in the table
  * @param {Student[]} students
  * @returns {void}
  */
@@ -100,11 +106,12 @@ const DisplayStudent = (students) => {
 };
 
 /**
- *
+ * Returns the number of students with this OM ID
  * @param {string} input
  * @returns {void}
  */
 const FindStudent = (input) => {
+  // Display all if no input is given
   students =
     input.length == 0
       ? students.sort((a, b) => a.Neve.localeCompare(b.Neve))
