@@ -26,12 +26,25 @@
       <div class="Listaz">
         <label for="OsszesPontszamInput">Összes elért pontszám:</label>
         <input type="number" name="OsszesPontszamInput" id="OsszesPontszamInput" />
-        <button onclick="ListazClick()">Listáz</button>
+        <button onclick="Listaz()">Listáz</button>
       </div>
     </div>
     <br />
 
-    <div id="table"></div>
+    <div id="table">
+      <table id="dynamically_generated_table">
+        <tr>
+          <th>OM azonosító</th>
+          <th>Neve</th>
+          <th>Értesítési Címe</th>
+          <th>Email</th>
+          <th>Születési Dátum</th>
+          <th>Matek</th>
+          <th>Magyar</th>
+          <th>Összes Pontszám</th>
+        </tr>
+      </table>
+    </div>
   </section>
   <!--#region finder-->
   <section id="finder" style="visibility: hidden">
